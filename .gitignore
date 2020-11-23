@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+medusa
 
 # Test binary, built with `go test -c`
 *.test
