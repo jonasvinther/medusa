@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"medusa/cmd"
+)
 
 func main() {
-	fmt.Println("Hello from Medusa")
+	cmd.Execute()
 }
