@@ -36,10 +36,7 @@ jobs:
       run: go test -v ./...
 
     - name: Start Vault container
-      run: docker-compose -f scripts/docker-compose.yml up -d 
-      env:
-        VAULT_ROOT_TOKEN: my-root-token
-        VAULT_VOLUME: /tmp/vault/data/vault-volume
+      run: scripts/start-vault.sh
     
     - name: Debug
       run: docker ps -a
