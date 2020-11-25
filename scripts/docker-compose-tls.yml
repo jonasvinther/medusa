@@ -7,7 +7,7 @@ services:
       - "8201:8201"
     environment:
       VAULT_ADDR: 'https://0.0.0.0:8201'
-      VAULT_LOCAL_CONFIG: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable":"1"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
+      VAULT_LOCAL_CONFIG: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable":"0", "tls_cert_file":"/data/vault-volume/vault.local.crt", "tls_key_file":"/data/vault-volume/vault.local.key"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
       VAULT_DEV_ROOT_TOKEN_ID: "$VAULT_ROOT_TOKEN"
       VAULT_TOKEN: "$VAULT_ROOT_TOKEN"
     cap_add:
