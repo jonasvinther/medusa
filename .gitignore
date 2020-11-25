@@ -14,3 +14,6 @@ medusa
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Directory containing test data
+data/
