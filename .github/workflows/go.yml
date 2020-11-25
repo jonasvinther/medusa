@@ -48,7 +48,4 @@ jobs:
       run: ./medusa import ./test/data/import-example-1.yaml -p="secret/data" -v="http://0.0.0.0:8201" -t="my-root-token"
 
     - name: Get secret
-      run: curl \
-        -H 'X-Vault-Token: my-root-token' \
-        -X GET \
-        http://0.0.0.0:8201/v1/data/secret/A/B/C/D/Db
+      run: curl -H "X-Vault-Token: my-root-token" -X GET http://0.0.0.0:8201/v1/data/secret/A/B/C/D/Db
