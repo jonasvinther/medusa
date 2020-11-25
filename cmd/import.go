@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"medusa/pkg/importer"
 	"medusa/pkg/vaultengine"
 
@@ -37,6 +38,8 @@ var importCmd = &cobra.Command{
 		vaultURL, _ := cmd.Flags().GetString("vault-url")
 		vaultToken, _ := cmd.Flags().GetString("vault-token")
 		vaultPrefix, _ := cmd.Flags().GetString("vault-prefix")
+
+		fmt.Printf("Vault token: %s\n", vaultToken)
 
 		vault := vaultengine.VaultEngine{
 			Token:  vaultToken,
