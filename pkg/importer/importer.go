@@ -3,7 +3,6 @@ package importer
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"reflect"
 
 	"gopkg.in/yaml.v2"
@@ -42,35 +41,31 @@ func parseYaml(rawYaml RawYaml, parsedYaml *ParsedYaml, path string) {
 }
 
 // ImportYaml will import the content of a yaml file into a RawYaml struct
-func (engine VaultEngine) ImportYaml(yamlFile string) {
-	configFile, err := os.Open(yamlFile)
+func ImportYaml(yamlFile string) (parsedYaml ParsedYaml, err error) {
+	byteValue, err := ioutil.ReadFile(yamlFile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	byteValue, err := ioutil.ReadAll(configFile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
-	}
+	return doImportYaml(byteValue)
+}
+
+func doImportYaml(byteValue []byte) (parsedYaml ParsedYaml, err error) {
 
 	// Create objects for the the two data types
 	// that is needed in order to pass the yaml data
-	parsedYaml := make(ParsedYaml)
+	parsedYaml = make(ParsedYaml)
 	rawYaml := make(RawYaml)
 
 	err = yaml.Unmarshal(byteValue, &rawYaml)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		return nil, err
 	}
 
 	// Parse the yaml data using a recursive loop
 	parseYaml(rawYaml, &parsedYaml, "")
 
-	// Write the data to Vault using the Vault engine
-	for path, value := range parsedYaml {
-		engine.WriteSecret(path, value)
-	}
+	// fmt.Printf("%v", parsedYaml)
+
+	return parsedYaml, nil
 }
