@@ -1,9 +1,9 @@
 #!/bin/bash
 
 export VAULT_VOLUME=/tmp/vault/data/vault-volume
-export VAULT_ADD=""
 export VAULT_ROOT_TOKEN="00000000-0000-0000-0000-000000000000"
 export HOST_IP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+export VAULT_ADDR="https://$HOST_IP:8201"
 
 # Generate self signed certificates for Vault to use
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
@@ -51,6 +51,6 @@ To run vault commands, use the following docker command:
 "
 
 # Generate .env file
-echo "export VAULT_ADDR=https://$HOST_IP:8201
+echo "export VAULT_ADDR=$VAULT_ADDR
 export VAULT_SKIP_VERIFY=true
 export VAULT_TOKEN=$VAULT_ROOT_TOKEN" > .env
