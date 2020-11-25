@@ -38,8 +38,8 @@ jobs:
     - name: Start Vault container
       run: docker-compose -f scripts/docker-compose.yml up -d 
       env:
-        VAULT_ROOT_TOKEN: Mona
+        VAULT_ROOT_TOKEN: my-root-token
         VAULT_VOLUME: /tmp/vault/data/vault-volume
     
     - name: Run Medusa
-      run: ./medusa --help
+      run: ./medusa import ./test/data/import-example-1.yaml -p="secret/data" -v="http://localhost:8201" -t="my-root-token"

@@ -1,0 +1,18 @@
+A:
+  B:
+    C:
+      D:
+        Da: value 1
+        Db: 
+          DBa: value 1
+          DBb: value 2
+    E:
+      Ea: value 1
+      Eb: value 2
+  Xa:
+    Z:
+      Za: value 1
+      Zb: value 2
+  F:
+    G:
+      Ga: value1
