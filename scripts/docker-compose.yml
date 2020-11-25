@@ -9,15 +9,15 @@ services:
     environment:
       VAULT_ADDR: 'https://0.0.0.0:8201'
       VAULT_LOCAL_CONFIG: '{"listener": [{"tcp":{"address": "0.0.0.0:8201","tls_disable":"1"}}], "default_lease_ttl": "168h", "max_lease_ttl": "720h"}, "ui": true}'
-      VAULT_DEV_ROOT_TOKEN_ID: "$VAULT_ROOT_TOKEN"
-      VAULT_TOKEN: "$VAULT_ROOT_TOKEN"
+      VAULT_DEV_ROOT_TOKEN_ID: "$VAULT_TOKEN"
+      VAULT_TOKEN: "$VAULT_TOKEN"
     cap_add:
       - IPC_LOCK
     volumes:
       - /tmp/vault/data:/data
     healthcheck:
       retries: 5
-    command: server -dev -dev-root-token-id="$VAULT_ROOT_TOKEN"
+    command: server -dev -dev-root-token-id="$VAULT_TOKEN"
     networks:
       - vault
 networks:
