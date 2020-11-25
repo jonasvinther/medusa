@@ -40,7 +40,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Start Vault container
-      run: docker-compose up -d 
+      run: docker-compose up -d -f scripts/docker-compose.yml 
       env:
         VAULT_ROOT_TOKEN: Mona
         VAULT_VOLUME: /tmp/vault/data/vault-volume
