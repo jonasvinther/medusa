@@ -1,14 +1,11 @@
 #!/bin/bash
 
+# Set variables
+export SCRIPT_SOURCE=$(dirname "${BASH_SOURCE[0]}")
 export VAULT_VOLUME=/tmp/vault/data/vault-volume
 export VAULT_ROOT_TOKEN="00000000-0000-0000-0000-000000000000"
 export HOST_IP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
 export VAULT_ADDR="https://$HOST_IP:8201"
-
-# Generate self signed certificates for Vault to use
-openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
-    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=vault.local" \
-    -keyout vault.local.key  -out vault.local.crt
 
 # Cleanup the temp folder
 if [ -d "$VAULT_VOLUME" ] 
@@ -18,9 +15,10 @@ else
     mkdir -p $VAULT_VOLUME
 fi
 
-# Move certificates to temp folder
-mv vault.local.key /tmp/vault/data/vault-volume/
-mv vault.local.crt /tmp/vault/data/vault-volume/
+# Generate self signed certificates for Vault to use
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=vault.local" \
+    -keyout $VAULT_VOLUME/vault.local.key  -out $VAULT_VOLUME/vault.local.crt
 
 # Change permission on Vault volume folder
 chmod 700 $VAULT_VOLUME/*
@@ -29,7 +27,8 @@ chmod 700 $VAULT_VOLUME/*
 docker run -d -u root -v $VAULT_VOLUME:/tmp/vault:rw alpine:latest chown -R 100:1000 ls /tmp/vault
 
 # Start the Vault container
-docker-compose up -d
+(cd $SCRIPT_SOURCE
+docker-compose up -d)
 
 # Wait for Vault to startup
 sleep 5
@@ -51,6 +50,8 @@ To run vault commands, use the following docker command:
 "
 
 # Generate .env file
+echo "Generating .env file"
+(cd $SCRIPT_SOURCE
 echo "export VAULT_ADDR=$VAULT_ADDR
 export VAULT_SKIP_VERIFY=true
-export VAULT_TOKEN=$VAULT_ROOT_TOKEN" > .env
+export VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN" > .env)
