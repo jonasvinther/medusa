@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"medusa/pkg/importer"
+	"medusa/pkg/vaultengine"
 
 	"github.com/spf13/cobra"
 )
@@ -21,11 +22,16 @@ var importCmd = &cobra.Command{
 		vaultToken, _ := cmd.Flags().GetString("vault-token")
 		vaultPrefix, _ := cmd.Flags().GetString("vault-prefix")
 
-		vault := importer.VaultEngine{
+		vault := vaultengine.VaultEngine{
 			Token:  vaultToken,
 			URL:    vaultURL,
 			Prefix: vaultPrefix}
 
-		vault.ImportYaml(file)
+		parsedYaml, _ := importer.ImportYaml(file)
+
+		// Write the data to Vault using the Vault engine
+		for path, value := range parsedYaml {
+			vault.WriteSecret(path, value)
+		}
 	},
 }
