@@ -56,4 +56,4 @@ echo "Generating .env file"
 (cd $SCRIPT_SOURCE
 echo "export VAULT_ADDR=$VAULT_ADDR
 export VAULT_SKIP_VERIFY=true
-export VAULT_ROOT_TOKEN=$VAULT_ROOT_TOKEN" > .env)
+export VAULT_TOKEN=$VAULT_ROOT_TOKEN" > .env)
