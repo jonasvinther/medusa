@@ -37,5 +37,4 @@ func TestDoImportYaml(t *testing.T) {
 	if err != nil {
 		t.Error("Failed parsing yaml")
 	}
-
 }
