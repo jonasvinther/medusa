@@ -42,4 +42,4 @@ jobs:
         VAULT_VOLUME: /tmp/vault/data/vault-volume
     
     - name: Run Medusa
-      run: ./medisa --help
+      run: ./medusa --help
