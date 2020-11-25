@@ -10,8 +10,10 @@ export VAULT_ADDR="https://$HOST_IP:8201"
 # Cleanup the temp folder
 if [ -d "$VAULT_VOLUME" ] 
 then
-    rm -fr $VAULT_VOLUME/*
-else
+    echo "removing old certificate folder"
+    # Setting UID to 100 for the certificates for Vault to use
+    docker run -d -u root -v /:/tmp/vault:rw alpine:latest rm -rf /tmp/vault/tmp/vault
+    echo "Creating folder for certificates"
     mkdir -p $VAULT_VOLUME
 fi
 
@@ -28,7 +30,7 @@ docker run -d -u root -v $VAULT_VOLUME:/tmp/vault:rw alpine:latest chown -R 100:
 
 # Start the Vault container
 (cd $SCRIPT_SOURCE
-docker-compose up -d)
+docker-compose -f docker-compose-tls.yml up -d)
 
 # Wait for Vault to startup
 sleep 5
