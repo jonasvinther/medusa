@@ -41,5 +41,15 @@ jobs:
         VAULT_ROOT_TOKEN: my-root-token
         VAULT_VOLUME: /tmp/vault/data/vault-volume
     
+    - name: Debug
+      run: docker ps -a
+
     - name: Run Medusa
       run: ./medusa import ./test/data/import-example-1.yaml -p="secret/data" -v="http://localhost:8201" -t="my-root-token"
+
+    # - name: Get secret
+    #   run: curl \
+    #     -H "X-Vault-Token: my-root-token" \
+    #     -H "X-Vault-Namespace: ns1/ns2/" \
+    #     -X GET \
+    #     http://127.0.0.1:8200/v1/secret/foo
