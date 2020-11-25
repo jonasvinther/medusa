@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -33,17 +31,7 @@ func init() {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		log.Fatalf("Error while reading config file %s", err)
+		// log.Fatalf("Error while reading config file %s", err)
 	}
-
-	viper.BindPFlag("listen.bind", rootCmd.Flags().Lookup("VAULT_ADDR"))
-
-	// viper.Get() returns an empty interface{}
-	// to get the underlying type of the key,
-	// we have to do the type assertion, we know the underlying value is string
-	// if we type assert to other type it will throw an error
-	// value, _ := viper.Get("VAULT_ADDR").(string)
-
-	// fmt.Println(value)
 
 }
