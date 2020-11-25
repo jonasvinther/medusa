@@ -34,3 +34,13 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start Vault container
+      run: docker-compose -f scripts/docker-compose.yml up -d 
+      env:
+        VAULT_ROOT_TOKEN: Mona
+        VAULT_VOLUME: /tmp/vault/data/vault-volume
