@@ -15,7 +15,13 @@ type VaultEngine struct {
 
 // WriteSecret is used for writing data to a Vault instance
 func (engine VaultEngine) WriteSecret(path string, data map[string]interface{}) {
-	client, err := api.NewClient(&api.Config{Address: engine.URL})
+
+	config := api.Config{Address: engine.URL}
+	config.ConfigureTLS(&api.TLSConfig{
+		Insecure: true,
+	})
+
+	client, err := api.NewClient(&config)
 	if err != nil {
 		log.Fatalf("Error while creating client. %s", err)
 	}
