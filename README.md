@@ -22,4 +22,4 @@ source scripts/.env
 Now you can open Vault in a browser [https://localhost:8201](https://localhost:8201) and login with the root token (found by `echo $VAULT_TOKEN`)
 
 ## How to contribute
-Create an issue or pull request
+Please read and follow our [contributing guide](docs/CONTRIBUTING.md)
