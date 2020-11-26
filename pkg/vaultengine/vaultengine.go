@@ -37,7 +37,7 @@ func (engine VaultEngine) WriteSecret(path string, data map[string]interface{}) 
 	if err != nil {
 		log.Printf("Error while writing secret. %s", err)
 	} else {
-		log.Printf("Secret succesfully written to Vault instance on path [%s]", path)
+		log.Printf("Secret successfully written to Vault instance on path [%s]", path)
 	}
 }
 
