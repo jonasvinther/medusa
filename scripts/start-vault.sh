@@ -4,7 +4,14 @@
 export SCRIPT_SOURCE=$(dirname "${BASH_SOURCE[0]}")
 export VAULT_VOLUME=/tmp/vault/data/vault-volume
 export VAULT_ROOT_TOKEN="00000000-0000-0000-0000-000000000000"
-export HOST_IP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+
+if ! [ -x "$(command -v ip)" ]; then
+  echo "The command ip is not found, reverting to localhost"
+  export HOST_IP="localhost"
+else
+    export HOST_IP=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p')
+fi
+
 export VAULT_ADDR="https://$HOST_IP:8201"
 
 # Cleanup the temp folder
