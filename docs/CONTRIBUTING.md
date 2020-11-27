@@ -28,3 +28,13 @@ If you have questions regarding Medusa, feel free to create an issue with your q
 1. Commit your changes (`git commit -m 'Add some feature'`)
 1. Push to the branch (`git push origin my-new-feature`)
 1. Create new pull request
+
+### Sync your fork for further development
+
+If you have forked Medusa before and need to update / sync your repo with the upstream repository, here's a guide to do that
+
+1. Add the remote, call it "upstream" (`git remote add upstream https://github.com/jonasvinther/medusa`)
+1. Fetch all the branches of that remote into remote-tracking branches (`git fetch upstream`)
+1. Make sure that you're on your master branch (`git checkout main`)
+1. Rewrite your main branch (`git rebase upstream/main`)
+``` 
