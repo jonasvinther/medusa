@@ -5,6 +5,7 @@
 *.so
 *.dylib
 medusa
+bin/
 
 # Test binary, built with `go test -c`
 *.test
