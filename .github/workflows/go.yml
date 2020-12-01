@@ -44,8 +44,11 @@ jobs:
     - name: Debug
       run: docker ps -a
 
-    - name: Run Medusa
+    - name: Run Medusa import
       run: ./medusa import ./test/data/import-example-1.yaml -p="secret/data" -v="http://0.0.0.0:8201" -t="my-root-token"
+
+    - name: Run Medusa export
+      run: ./medusa export /A/B -p="/secret/metadata" -v="http://0.0.0.0:8201" -t="my-root-token"
 
     - name: Get secret
       run: "curl -H 'X-Vault-Token: my-root-token' -X GET http://0.0.0.0:8201/v1/secret/data/A/B/C/D/Db"
