@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"medusa/pkg/importer"
+	"fmt"
 	"medusa/pkg/vaultengine"
 
 	"github.com/spf13/cobra"
@@ -9,12 +9,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(importCmd)
+	rootCmd.AddCommand(exportCmd)
 }
 
-var importCmd = &cobra.Command{
-	Use:   "import [file to import]",
-	Short: "Import a yaml file into a Vault instance",
+var exportCmd = &cobra.Command{
+	Use:   "export [file to import]",
+	Short: "Export Vault secrets as yaml",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -40,11 +40,14 @@ var importCmd = &cobra.Command{
 
 		client := vaultengine.NewClient(vaultAddr, vaultToken, vaultPrefix)
 
-		parsedYaml, _ := importer.ImportYaml(file)
+		secret, err := client.FolderRead(file)
 
-		// Write the data to Vault using the Vault engine
-		for path, value := range parsedYaml {
-			client.SecretWrite(path, value)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			for _, key := range secret {
+				fmt.Println(key)
+			}
 		}
 	},
 }
