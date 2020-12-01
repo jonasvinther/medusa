@@ -51,5 +51,5 @@ jobs:
       run: "curl -H 'X-Vault-Token: my-root-token' -X GET http://0.0.0.0:8201/v1/secret/data/A/B/C/D/Db"
 
     - name: Go Report update
-      if: {{ github.repository == 'jonasvinther/medusa' }}
+      if: ${{ github.repository == 'jonasvinther/medusa' }}
       run: "curl -X POST -F \"repo=github.com/$GITHUB_REPOSITORY\" https://goreportcard.com/checks"
