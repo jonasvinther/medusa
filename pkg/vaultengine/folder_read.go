@@ -14,7 +14,7 @@ import (
 
 //FolderRead reads the provided path and all sub paths
 func (client *Client) FolderRead(path string) ([]interface{}, error) {
-	finalPath := client.namespace + path
+	finalPath := client.namespace + "/metadata" + path
 
 	secret, err := client.vc.Logical().List(finalPath)
 	if err != nil {
