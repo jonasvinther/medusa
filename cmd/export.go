@@ -6,7 +6,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/yaml.v2"
 )
 
 func init() {
@@ -41,25 +40,11 @@ var exportCmd = &cobra.Command{
 
 		client := vaultengine.NewClient(vaultAddr, vaultToken, vaultPrefix)
 
-		y, _ := client.ExportYaml(path)
+		d, _ := client.FolderExport(path)
+		y, _ := client.ConvertToYaml(d)
+		// j, _ := client.ConvertToJSON(d)
 
-		// fmt.Printf("Result: %v\n", y)
-
-		b, err := yaml.Marshal(y)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		fmt.Println(string(b))
-
-		// secret, err := client.FolderRead(path)
-
-		// if err != nil {
-		// 	fmt.Println(err)
-		// } else {
-		// 	for _, key := range secret {
-		// 		fmt.Println(key)
-		// 	}
-		// }
+		fmt.Println(y)
+		// fmt.Println(j)
 	},
 }

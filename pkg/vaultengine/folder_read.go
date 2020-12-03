@@ -4,15 +4,7 @@ import (
 	"fmt"
 )
 
-//FolderRead reads the provided path and all sub paths
-// func (client *Client) FolderRead(path string) (map[string]map[string]interface{}, error) {
-
-// 	out := make(map[string]map[string]interface{})
-
-// 	return out, nil
-// }
-
-//FolderRead reads the provided path and all sub paths
+//FolderRead reads the subpaths and secrets of the provided path
 func (client *Client) FolderRead(path string) ([]interface{}, error) {
 	finalPath := client.namespace + "/metadata" + path
 
