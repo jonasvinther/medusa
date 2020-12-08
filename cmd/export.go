@@ -2,14 +2,16 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"medusa/pkg/vaultengine"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func init() {
 	rootCmd.AddCommand(exportCmd)
+	exportCmd.PersistentFlags().StringP("format", "f", "yaml", "Specify the export format [yaml|json]")
+	exportCmd.PersistentFlags().StringP("output", "o", "", "Write to file instead of stdout")
 }
 
 var exportCmd = &cobra.Command{
@@ -19,32 +21,40 @@ var exportCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		path := args[0]
-
-		// Apply the viper config value to the flag when the flag is not set and viper has a value
-		if viper.IsSet("VAULT_ADDR") {
-			value := viper.Get("VAULT_ADDR").(string)
-			cmd.Flags().Set("vault-url", value)
-		}
-		if viper.IsSet("VAULT_TOKEN") {
-			value := viper.Get("VAULT_TOKEN").(string)
-			cmd.Flags().Set("vault-token", value)
-		}
-		if viper.IsSet("VAULT_TOKEN") {
-			value := viper.Get("VAULT_TOKEN").(string)
-			cmd.Flags().Set("vault-token", value)
-		}
-
-		vaultAddr, _ := cmd.Flags().GetString("vault-url")
-		vaultToken, _ := cmd.Flags().GetString("vault-token")
+		vaultAddr, _ := cmd.Flags().GetString("address")
+		vaultToken, _ := cmd.Flags().GetString("token")
+		insecure, _ := cmd.Flags().GetBool("insecure")
 		vaultPrefix, _ := cmd.Flags().GetString("vault-prefix")
+		exportFormat, _ := cmd.Flags().GetString("format")
+		output, _ := cmd.Flags().GetString("output")
 
-		client := vaultengine.NewClient(vaultAddr, vaultToken, vaultPrefix)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, vaultPrefix, insecure)
+		d, err := client.FolderExport(path)
 
-		d, _ := client.FolderExport(path)
-		y, _ := client.ConvertToYaml(d)
-		// j, _ := client.ConvertToJSON(d)
+		if err != nil {
+			log.Printf("%s", err)
+			return
+		}
 
-		fmt.Println(y)
-		// fmt.Println(j)
+		switch exportFormat {
+		case "json":
+			data, _ := client.ConvertToJSON(d)
+
+			if output == "" {
+				fmt.Println(string(data))
+			} else {
+				client.WriteToFile(output, data)
+			}
+		case "yaml":
+			data, _ := client.ConvertToYaml(d)
+
+			if output == "" {
+				fmt.Println(string(data))
+			} else {
+				client.WriteToFile(output, data)
+			}
+		default:
+			log.Printf("Wrong format specified")
+		}
 	},
 }

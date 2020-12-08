@@ -18,3 +18,5 @@ bin/
 
 # Local config files
 .env
+*.json
+*.yaml

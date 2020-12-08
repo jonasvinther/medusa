@@ -9,15 +9,17 @@ type Client struct {
 	token     string
 	addr      string
 	namespace string
+	insecure  bool
 	vc        *vault.Client
 }
 
 // NewClient creates a instance of the VaultClient struct
-func NewClient(addr, token, namespace string) *Client {
+func NewClient(addr, token, namespace string, insecure bool) *Client {
 
 	client := &Client{
 		token:     token,
 		addr:      addr,
+		insecure:  insecure,
 		namespace: namespace}
 
 	client.newVaultClient()
@@ -30,7 +32,7 @@ func (client *Client) newVaultClient() error {
 
 	// Enable insecure
 	config.ConfigureTLS(&vault.TLSConfig{
-		Insecure: true,
+		Insecure: client.insecure,
 	})
 
 	vc, err := vault.NewClient(&config)
