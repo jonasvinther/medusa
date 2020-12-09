@@ -31,7 +31,7 @@ var exportCmd = &cobra.Command{
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
 		client.UseEngine(engine)
 
-		d, err := client.FolderExport(path)
+		exportData, err := client.FolderExport(path)
 		if err != nil {
 			log.Printf("%s", err)
 			return
@@ -39,7 +39,7 @@ var exportCmd = &cobra.Command{
 
 		switch exportFormat {
 		case "json":
-			data, _ := vaultengine.ConvertToJSON(d)
+			data, _ := vaultengine.ConvertToJSON(exportData)
 
 			if output == "" {
 				fmt.Println(string(data))
@@ -47,7 +47,7 @@ var exportCmd = &cobra.Command{
 				vaultengine.WriteToFile(output, data)
 			}
 		case "yaml":
-			data, _ := vaultengine.ConvertToYaml(d)
+			data, _ := vaultengine.ConvertToYaml(exportData)
 
 			if output == "" {
 				fmt.Println(string(data))
