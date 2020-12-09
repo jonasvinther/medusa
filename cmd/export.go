@@ -15,7 +15,7 @@ func init() {
 }
 
 var exportCmd = &cobra.Command{
-	Use:   "export [file to import]",
+	Use:   "export [vault path]",
 	Short: "Export Vault secrets as yaml",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(1),
@@ -24,13 +24,14 @@ var exportCmd = &cobra.Command{
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
 		insecure, _ := cmd.Flags().GetBool("insecure")
-		vaultPrefix, _ := cmd.Flags().GetString("vault-prefix")
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 
-		client := vaultengine.NewClient(vaultAddr, vaultToken, vaultPrefix, insecure)
-		d, err := client.FolderExport(path)
+		engine, path := vaultengine.PathSplitPrefix(path)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
+		client.UseEngine(engine)
 
+		d, err := client.FolderExport(path)
 		if err != nil {
 			log.Printf("%s", err)
 			return
@@ -38,20 +39,20 @@ var exportCmd = &cobra.Command{
 
 		switch exportFormat {
 		case "json":
-			data, _ := client.ConvertToJSON(d)
+			data, _ := vaultengine.ConvertToJSON(d)
 
 			if output == "" {
 				fmt.Println(string(data))
 			} else {
-				client.WriteToFile(output, data)
+				vaultengine.WriteToFile(output, data)
 			}
 		case "yaml":
-			data, _ := client.ConvertToYaml(d)
+			data, _ := vaultengine.ConvertToYaml(d)
 
 			if output == "" {
 				fmt.Println(string(data))
 			} else {
-				client.WriteToFile(output, data)
+				vaultengine.WriteToFile(output, data)
 			}
 		default:
 			log.Printf("Wrong format specified")

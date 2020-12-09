@@ -9,22 +9,26 @@ type Client struct {
 	token     string
 	addr      string
 	namespace string
+	engine    string
 	insecure  bool
 	vc        *vault.Client
 }
 
 // NewClient creates a instance of the VaultClient struct
-func NewClient(addr, token, namespace string, insecure bool) *Client {
-
+func NewClient(addr, token string, insecure bool) *Client {
 	client := &Client{
-		token:     token,
-		addr:      addr,
-		insecure:  insecure,
-		namespace: namespace}
+		token:    token,
+		addr:     addr,
+		insecure: insecure}
 
 	client.newVaultClient()
 
 	return client
+}
+
+// UseEngine defines which engine the Vault client will use
+func (client *Client) UseEngine(engine string) {
+	client.engine = engine
 }
 
 func (client *Client) newVaultClient() error {
@@ -42,9 +46,9 @@ func (client *Client) newVaultClient() error {
 
 	client.vc = vc
 
-	if client.namespace != "" {
-		client.vc.SetNamespace(client.namespace)
-	}
+	// if client.namespace != "" {
+	// 	client.vc.SetNamespace(client.namespace)
+	// }
 
 	if client.token != "" {
 		client.vc.SetToken(client.token)

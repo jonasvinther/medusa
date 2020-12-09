@@ -36,7 +36,6 @@ func Execute() error {
 func init() {
 	rootCmd.PersistentFlags().StringP("address", "a", "", "Address of the Vault server")
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Vault authentication token")
-	rootCmd.PersistentFlags().StringP("vault-prefix", "p", "", "Prefix of the Vault path")
 	rootCmd.PersistentFlags().BoolP("insecure", "k", false, "Allow insecure server connections when using SSL")
 
 	// SetConfigFile explicitly defines the path, name and extension of the config file.

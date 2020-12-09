@@ -4,7 +4,7 @@ import "log"
 
 // SecretRead is used for reading a secret from a Vault instance
 func (client *Client) SecretRead(path string) map[string]interface{} {
-	finalPath := client.namespace + "/data" + path
+	finalPath := client.engine + "/data/" + path
 
 	secret, err := client.vc.Logical().Read(finalPath)
 	if err != nil {

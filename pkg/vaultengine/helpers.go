@@ -3,6 +3,7 @@ package vaultengine
 import (
 	"encoding/json"
 	"io/ioutil"
+	"path"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -15,7 +16,7 @@ func IsFolder(p string) bool {
 }
 
 // ConvertToYaml will return the Folder object as yaml
-func (client *Client) ConvertToYaml(folder Folder) ([]byte, error) {
+func ConvertToYaml(folder Folder) ([]byte, error) {
 	yaml, err := yaml.Marshal(folder)
 	if err != nil {
 		return nil, err
@@ -24,7 +25,7 @@ func (client *Client) ConvertToYaml(folder Folder) ([]byte, error) {
 }
 
 // ConvertToJSON will return the Folder object as yaml
-func (client *Client) ConvertToJSON(folder Folder) ([]byte, error) {
+func ConvertToJSON(folder Folder) ([]byte, error) {
 	json, err := json.MarshalIndent(folder, "", "\t")
 	// json, err := json.Marshal(folder)
 	if err != nil {
@@ -34,10 +35,36 @@ func (client *Client) ConvertToJSON(folder Folder) ([]byte, error) {
 }
 
 // WriteToFile will create a file and store the provieded data in it
-func (client *Client) WriteToFile(filename string, data []byte) error {
+func WriteToFile(filename string, data []byte) error {
 	// file, _ := json.MarshalIndent(data, "", " ")
 
 	err := ioutil.WriteFile(filename, data, 0644)
 
 	return err
+}
+
+// PathSplitPrefix will split the first part of a string into it's own variable
+// and return it together with the rest of the path
+func PathSplitPrefix(path string) (string, string) {
+	path = strings.TrimPrefix(path, "/")
+	path = strings.TrimSuffix(path, "/")
+
+	parts := strings.Split(path, "/")
+	prefix := parts[0]
+	suffix := strings.Join(parts[1:], "/")
+	suffix = EnsureFolder(suffix)
+	return prefix, suffix
+}
+
+// PathJoin combines multiple paths into one.
+func PathJoin(p ...string) string {
+	if strings.HasSuffix(p[len(p)-1], "/") {
+		return strings.TrimPrefix(path.Join(p...)+"/", "/")
+	}
+	return strings.TrimPrefix(path.Join(p...), "/")
+}
+
+// EnsureFolder ensures a path is a folder (adds a trailing "/").
+func EnsureFolder(p string) string {
+	return PathJoin(p, "/")
 }

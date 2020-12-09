@@ -4,7 +4,7 @@ import "log"
 
 // SecretWrite is used for writing data to a Vault instance
 func (client *Client) SecretWrite(path string, data map[string]interface{}) {
-	finalPath := client.namespace + path
+	finalPath := client.engine + "/data/" + path
 
 	finalData := make(map[string]interface{})
 	finalData["data"] = data
