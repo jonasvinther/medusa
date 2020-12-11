@@ -63,7 +63,7 @@ Example:
 
 ```
 ./medusa export secret -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --format="yaml" --insecure
-
+"":
   A:
     B:
       C:
