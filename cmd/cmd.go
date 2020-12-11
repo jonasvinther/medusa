@@ -41,7 +41,9 @@ func init() {
 	// SetConfigFile explicitly defines the path, name and extension of the config file.
 	// Viper will use this and not check any of the config paths.
 	// .env - It will search for the .env file in the current directory
-	viper.SetConfigFile("scripts/.env")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("$HOME/.medusa")
+	viper.SetConfigFile("config.yaml")
 
 	// Find and read the config file
 	err := viper.ReadInConfig()
