@@ -3,7 +3,7 @@
 # Set variables
 export SCRIPT_SOURCE=$(dirname "${BASH_SOURCE[0]}")
 export VAULT_VOLUME=/tmp/vault/data/vault-volume
-export VAULT_ROOT_TOKEN="00000000-0000-0000-0000-000000000000"
+export VAULT_TOKEN="00000000-0000-0000-0000-000000000000"
 
 if ! [ -x "$(command -v ip)" ]; then
   echo "The command ip is not found, reverting to localhost"
@@ -67,4 +67,4 @@ echo "Generating Medusa config file"
 
 echo "VAULT_ADDR: $VAULT_ADDR
 VAULT_SKIP_VERIFY: true
-VAULT_TOKEN: $VAULT_ROOT_TOKEN" > ~/.medusa/config.yaml
+VAULT_TOKEN: $VAULT_TOKEN" > ~/.medusa/config.yaml

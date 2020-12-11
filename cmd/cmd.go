@@ -43,7 +43,7 @@ func init() {
 	// .env - It will search for the .env file in the current directory
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("$HOME/.medusa")
-	viper.SetConfigFile("config.yaml")
+	viper.SetConfigName("config.yaml")
 
 	// Find and read the config file
 	err := viper.ReadInConfig()
