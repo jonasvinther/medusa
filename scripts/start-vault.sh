@@ -20,9 +20,9 @@ then
     echo "removing old certificate folder"
     # Setting UID to 100 for the certificates for Vault to use
     docker run -d -u root -v /:/tmp/vault:rw alpine:latest rm -rf /tmp/vault/tmp/vault
+fi
     echo "Creating folder for certificates"
     mkdir -p $VAULT_VOLUME
-fi
 
 # Generate self signed certificates for Vault to use
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
