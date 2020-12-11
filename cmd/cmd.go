@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -54,7 +52,7 @@ func init() {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		log.Fatalf("Error while reading config file %s", err)
+		// log.Fatalf("Error while reading config file %s", err)
 	}
 
 }
