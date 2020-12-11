@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"medusa/pkg/importer"
 	"medusa/pkg/vaultengine"
+	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func init() {
@@ -14,43 +13,27 @@ func init() {
 }
 
 var importCmd = &cobra.Command{
-	Use:   "import [file to import]",
+	Use:   "import [vault path] [file to import]",
 	Short: "Import a yaml file into a Vault instance",
 	Long:  ``,
-	Args:  cobra.MinimumNArgs(1),
+	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		file := args[0]
+		path := args[0]
+		file := args[1]
+		vaultAddr, _ := cmd.Flags().GetString("address")
+		vaultToken, _ := cmd.Flags().GetString("token")
+		insecure, _ := cmd.Flags().GetBool("insecure")
 
-		// Apply the viper config value to the flag when the flag is not set and viper has a value
-		if viper.IsSet("VAULT_ADDR") {
-			value := viper.Get("VAULT_ADDR").(string)
-			cmd.Flags().Set("vault-url", value)
-		}
-		if viper.IsSet("VAULT_TOKEN") {
-			value := viper.Get("VAULT_TOKEN").(string)
-			cmd.Flags().Set("vault-token", value)
-		}
-		if viper.IsSet("VAULT_TOKEN") {
-			value := viper.Get("VAULT_TOKEN").(string)
-			cmd.Flags().Set("vault-token", value)
-		}
-
-		vaultURL, _ := cmd.Flags().GetString("vault-url")
-		vaultToken, _ := cmd.Flags().GetString("vault-token")
-		vaultPrefix, _ := cmd.Flags().GetString("vault-prefix")
-
-		fmt.Printf("Vault token: %s\n", vaultToken)
-
-		vault := vaultengine.VaultEngine{
-			Token:  vaultToken,
-			URL:    vaultURL,
-			Prefix: vaultPrefix}
-
+		engine, prefix := vaultengine.PathSplitPrefix(path)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
+		client.UseEngine(engine)
 		parsedYaml, _ := importer.ImportYaml(file)
 
 		// Write the data to Vault using the Vault engine
 		for path, value := range parsedYaml {
-			vault.WriteSecret(path, value)
+			path = strings.TrimPrefix(path, "/")
+			path = prefix + path
+			client.SecretWrite(path, value)
 		}
 	},
 }
