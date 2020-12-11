@@ -20,9 +20,9 @@ then
     echo "removing old certificate folder"
     # Setting UID to 100 for the certificates for Vault to use
     docker run -d -u root -v /:/tmp/vault:rw alpine:latest rm -rf /tmp/vault/tmp/vault
+fi
     echo "Creating folder for certificates"
     mkdir -p $VAULT_VOLUME
-fi
 
 # Generate self signed certificates for Vault to use
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
@@ -59,8 +59,12 @@ To run vault commands, use the following docker command:
 "
 
 # Generate .env file
-echo "Generating .env file"
-(cd $SCRIPT_SOURCE
-echo "export VAULT_ADDR=$VAULT_ADDR
-export VAULT_SKIP_VERIFY=true
-export VAULT_TOKEN=$VAULT_ROOT_TOKEN" > .env)
+# Cleanup the temp folder
+if [ ! -d "~/.medusa" ]; then
+  mkdir -p ~/.medusa
+fi
+echo "Generating Medusa config file"
+
+echo "VAULT_ADDR: $VAULT_ADDR
+VAULT_SKIP_VERIFY: true
+VAULT_TOKEN: $VAULT_ROOT_TOKEN" > ~/.medusa/config.yaml
