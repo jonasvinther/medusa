@@ -9,22 +9,30 @@
 Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
 
 ## How to use
+Go learn how to use the various commands, check out [quick-guide](docs/quick-guide.md)
+
+## Medusa help
 To test out `medusa` on your laptop
 ```
-# Build the binary
-go build
+Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
+Created by by Jonas Vinther & Henrik Høegh.
 
-# Start a local Vault instance in Docker
-./scripts/start-vault.sh
+Usage:
+  medusa [command]
 
-# Setup environment variables to point to Vault
-source scripts/.env
+Available Commands:
+  export      Export Vault secrets as yaml
+  help        Help about any command
+  import      Import a yaml file into a Vault instance
 
-# Import a test yaml file to Vault
-./medusa import ./test/data/import-example-1.yaml -p="secret/data" -v="$VAULT_ADDR" -t="$VAULT_TOKEN"
+Flags:
+  -a, --address string   Address of the Vault server
+  -h, --help             help for medusa
+  -k, --insecure         Allow insecure server connections when using SSL
+  -t, --token string     Vault authentication token
+
+Use "medusa [command] --help" for more information about a command.
 ``` 
-
-Now you can open Vault in a browser [https://localhost:8201](https://localhost:8201) and login with the root token (found by `echo $VAULT_TOKEN`)
 
 ## How to contribute
 Please read and follow our [contributing guide](docs/CONTRIBUTING.md)
