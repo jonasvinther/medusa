@@ -38,12 +38,15 @@ func init() {
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Vault authentication token")
 	rootCmd.PersistentFlags().BoolP("insecure", "k", false, "Allow insecure server connections when using SSL")
 
-	// SetConfigFile explicitly defines the path, name and extension of the config file.
+	// AutomaticEnv makes Viper load environment variables
+	viper.AutomaticEnv()
+
+	// Explicitly defines the path, name and type of the config file.
 	// Viper will use this and not check any of the config paths.
-	// .env - It will search for the .env file in the current directory
+	// It will search for the "config" file in the ~/.medusa
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("$HOME/.medusa")
-	viper.SetConfigName("config.yaml")
+	viper.SetConfigName("config")
 
 	// Find and read the config file
 	err := viper.ReadInConfig()
