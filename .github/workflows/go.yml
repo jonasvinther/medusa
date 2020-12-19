@@ -58,3 +58,14 @@ jobs:
     - name: Go Report update
       if: ${{ github.repository == 'jonasvinther/medusa' }}
       run: "curl -X POST -F \"repo=github.com/$GITHUB_REPOSITORY\" https://goreportcard.com/checks"
+    
+    - name: Run codecov
+      run: go test -race -covermode=atomic -v ./... -coverprofile=coverage.txt
+
+    - name: Upload coverage to Codecov
+      if: success() && ${{ github.repository == 'jonasvinther/medusa' }}
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.txt
+        token: ${{secrets.CODECOV}}
+        fail_ci_if_error: true
