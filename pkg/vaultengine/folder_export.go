@@ -33,7 +33,14 @@ func buildFolderStructure(parentFolder *Folder, parts []string, subFolders Folde
 	newSubFolder := make(Folder)
 
 	if len(parts) == 0 {
-		(*parentFolder)[nextPart] = subFolders
+		// If we are at the root level we overwrite the rootfolder with it's subfolder
+		// so that we don't get empty keys in our export
+		if nextPart == "" {
+			*parentFolder = subFolders
+		} else {
+			(*parentFolder)[nextPart] = subFolders
+		}
+
 	} else {
 		buildFolderStructure(&newSubFolder, parts, subFolders)
 		(*parentFolder)[nextPart] = newSubFolder
