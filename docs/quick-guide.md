@@ -63,7 +63,24 @@ Example:
 
 ```
 ./medusa export secret -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --format="yaml" --insecure
-"":
+A:
+  B:
+    C:
+      D:
+        Db:
+          DBa: value 1
+          DBb: value 2
+    E:
+      Ea: value 1
+      Eb: value 2
+  F:
+    G:
+      Ga: value1
+  Xa:
+    Z:
+      Za: value 1
+      Zb: value 2
+folder:
   A:
     B:
       C:
@@ -81,31 +98,40 @@ Example:
       Z:
         Za: value 1
         Zb: value 2
-  folder:
-    A:
-      B:
-        C:
-          D:
-            Db:
-              DBa: value 1
-              DBb: value 2
-        E:
-          Ea: value 1
-          Eb: value 2
-      F:
-        G:
-          Ga: value1
-      Xa:
-        Z:
-          Za: value 1
-          Zb: value 2
 ```
 
 If you want to get the output in a Json format, simply add `format="json"` like this
 ```
 ./medusa export secret -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --format="json" --insecure
 {
-  "": {
+  "A": {
+    "B": {
+      "C": {
+        "D": {
+          "Db": {
+            "DBa": "value 1",
+            "DBb": "value 2"
+          }
+        }
+      },
+      "E": {
+        "Ea": "value 1",
+        "Eb": "value 2"
+      }
+    },
+    "F": {
+      "G": {
+        "Ga": "value1"
+      }
+    },
+    "Xa": {
+      "Z": {
+        "Za": "value 1",
+        "Zb": "value 2"
+      }
+    }
+  },
+  "folder": {
     "A": {
       "B": {
         "C": {
@@ -130,35 +156,6 @@ If you want to get the output in a Json format, simply add `format="json"` like 
         "Z": {
           "Za": "value 1",
           "Zb": "value 2"
-        }
-      }
-    },
-    "folder": {
-      "A": {
-        "B": {
-          "C": {
-            "D": {
-              "Db": {
-                "DBa": "value 1",
-                "DBb": "value 2"
-              }
-            }
-          },
-          "E": {
-            "Ea": "value 1",
-            "Eb": "value 2"
-          }
-        },
-        "F": {
-          "G": {
-            "Ga": "value1"
-          }
-        },
-        "Xa": {
-          "Z": {
-            "Za": "value 1",
-            "Zb": "value 2"
-          }
         }
       }
     }

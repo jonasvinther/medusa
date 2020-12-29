@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strconv"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -22,6 +24,12 @@ Created by by Jonas Vinther & Henrik Høegh.`,
 		if viper.IsSet("VAULT_TOKEN") && token == "" {
 			value := viper.Get("VAULT_TOKEN").(string)
 			cmd.Flags().Set("token", value)
+		}
+
+		insecure, _ := cmd.Flags().GetBool("insecure")
+		if viper.IsSet("VAULT_SKIP_VERIFY") && insecure == false {
+			value := viper.GetBool("VAULT_SKIP_VERIFY")
+			cmd.Flags().Set("insecure", strconv.FormatBool(value))
 		}
 
 		return nil
