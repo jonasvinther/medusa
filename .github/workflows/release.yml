@@ -2,7 +2,8 @@ name: goreleaser
 
 on:
   push:
-    branches: [ 'make-release' ]
+    tags:
+      - v*.*.*
 
 jobs:
   goreleaser:
