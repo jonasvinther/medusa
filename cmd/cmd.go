@@ -11,7 +11,7 @@ var rootCmd = &cobra.Command{
 	Use:   "medusa",
 	Short: "Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.",
 	Long: `Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
-Created by by Jonas Vinther & Henrik Høegh.`,
+Created by Jonas Vinther & Henrik Høegh.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Apply the viper config value to the flag when the flag is not set and viper has a value
 		address, _ := cmd.Flags().GetString("address")

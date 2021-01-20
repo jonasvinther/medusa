@@ -15,7 +15,7 @@ Go learn how to use the various commands, check out [quick-guide](docs/quick-gui
 To test out `medusa` on your laptop
 ```
 Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
-Created by by Jonas Vinther & Henrik Høegh.
+Created by Jonas Vinther & Henrik Høegh.
 
 Usage:
   medusa [command]
