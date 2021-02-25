@@ -53,8 +53,18 @@ jobs:
     - name: Run Medusa export json
       run: ./medusa export secret/A -a="http://0.0.0.0:8201" -t="my-root-token" --format="json" --insecure
 
+    - name: Generate certificates
+      run: openssl genrsa -out private-key.pem 2048 && openssl rsa -in private-key.pem -pubout -out public-key.pem
+    - name: Export and encrypt
+      run: ./medusa export secret/A -a="http://0.0.0.0:8201" -t="my-root-token" --insecure --encrypt true --public-key="./public-key.pem" --output encrypted-export.txt
+    - name: Decrypt and import
+      run: ./medusa import secret/decrypted encrypted-export.txt -a="http://0.0.0.0:8201" -t="my-root-token" --insecure --decrypt true --private-key private-key.pem
+
+
     - name: Get secret
       run: "curl -H 'X-Vault-Token: my-root-token' -X GET http://0.0.0.0:8201/v1/secret/data/A/B/C/D/Db"
+    - name: Get secret from decrypted
+      run: "curl -H 'X-Vault-Token: my-root-token' -X GET http://0.0.0.0:8201/v1/secret/data/decrypted/A/B/C/D/Db"
     - name: Go Report update
       if: ${{ github.repository == 'jonasvinther/medusa' }}
       run: "curl -X POST -F \"repo=github.com/$GITHUB_REPOSITORY\" https://goreportcard.com/checks"

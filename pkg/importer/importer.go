@@ -2,7 +2,6 @@ package importer
 
 import (
 	"fmt"
-	"io/ioutil"
 	"reflect"
 
 	"gopkg.in/yaml.v2"
@@ -40,20 +39,10 @@ func parseYaml(rawYaml RawYaml, parsedYaml *ParsedYaml, path string) {
 	}
 }
 
-// ImportYaml will import the content of a yaml file into a RawYaml struct
-func ImportYaml(yamlFile string) (parsedYaml ParsedYaml, err error) {
-	byteValue, err := ioutil.ReadFile(yamlFile)
-	if err != nil {
-		return nil, err
-	}
-
-	return doImportYaml(byteValue)
-}
-
-func doImportYaml(byteValue []byte) (parsedYaml ParsedYaml, err error) {
-
+// ImportYaml parses the byte stream into yaml
+func ImportYaml(byteValue []byte) (parsedYaml ParsedYaml, err error) {
 	// Create objects for the the two data types
-	// that is needed in order to pass the yaml data
+	// that are needed in order to pass the yaml data
 	parsedYaml = make(ParsedYaml)
 	rawYaml := make(RawYaml)
 
@@ -64,8 +53,6 @@ func doImportYaml(byteValue []byte) (parsedYaml ParsedYaml, err error) {
 
 	// Parse the yaml data using a recursive loop
 	parseYaml(rawYaml, &parsedYaml, "")
-
-	// fmt.Printf("%v", parsedYaml)
 
 	return parsedYaml, nil
 }

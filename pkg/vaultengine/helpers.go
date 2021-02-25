@@ -3,6 +3,7 @@ package vaultengine
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	"path"
 	"strings"
 
@@ -35,12 +36,33 @@ func ConvertToJSON(folder Folder) ([]byte, error) {
 }
 
 // WriteToFile will create a file and store the provieded data in it
-func WriteToFile(filename string, data []byte) error {
+func WriteToFile(file string, data []byte) error {
 	// file, _ := json.MarshalIndent(data, "", " ")
 
-	err := ioutil.WriteFile(filename, data, 0644)
+	err := ioutil.WriteFile(file, data, 0644)
 
 	return err
+}
+
+/**
+ * Append string to the end of file
+ *
+ * path: the path of the file
+ * text: the string to be appended. If you want to append text line to file,
+ *       put a newline '\n' at the of the string.
+ */
+func AppendStringToFile(path, text string) error {
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.WriteString(text)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // PathSplitPrefix will split the first part of a string into it's own variable
