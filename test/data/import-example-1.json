@@ -1,0 +1,30 @@
+{
+  "A": {
+    "B": {
+      "C": {
+        "D": {
+          "Da": "JSON value",
+          "Db": {
+            "DBa": 13,
+            "DBb": "value 2"
+          }
+        }
+      },
+      "E": {
+        "Ea": "value 1",
+        "Eb": "value 2"
+      }
+    },
+    "Xa": {
+      "Z": {
+        "Za": "value 1",
+        "Zb": "value 2"
+      }
+    },
+    "F": {
+      "G": {
+        "Ga": "value1"
+      }
+    }
+  }
+}
