@@ -14,6 +14,25 @@ type RawYaml map[interface{}]interface{}
 // The format will be: map["path/to/secret"]["secret_key"]=interface{}
 type ParsedYaml map[string]map[string]interface{}
 
+// Import parses the byte stream into yaml struct.
+// The go yaml library is able to handle both yaml and json
+func Import(byteValue []byte) (parsedYaml ParsedYaml, err error) {
+	// Create objects for the the two data types
+	// that are needed in order to pass the yaml data
+	parsedYaml = make(ParsedYaml)
+	rawYaml := make(RawYaml)
+
+	err = yaml.Unmarshal(byteValue, &rawYaml)
+	if err != nil {
+		return nil, err
+	}
+
+	// Parse the yaml data using a recursive loop
+	parseYaml(rawYaml, &parsedYaml, "")
+
+	return parsedYaml, nil
+}
+
 func parseYaml(rawYaml RawYaml, parsedYaml *ParsedYaml, path string) {
 	for key, value := range rawYaml {
 		// Handle nil values in the yaml data
@@ -37,22 +56,4 @@ func parseYaml(rawYaml RawYaml, parsedYaml *ParsedYaml, path string) {
 			(*parsedYaml)[path][fmt.Sprintf("%v", key)] = value
 		}
 	}
-}
-
-// ImportYaml parses the byte stream into yaml
-func ImportYaml(byteValue []byte) (parsedYaml ParsedYaml, err error) {
-	// Create objects for the the two data types
-	// that are needed in order to pass the yaml data
-	parsedYaml = make(ParsedYaml)
-	rawYaml := make(RawYaml)
-
-	err = yaml.Unmarshal(byteValue, &rawYaml)
-	if err != nil {
-		return nil, err
-	}
-
-	// Parse the yaml data using a recursive loop
-	parseYaml(rawYaml, &parsedYaml, "")
-
-	return parsedYaml, nil
 }

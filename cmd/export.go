@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"medusa/pkg/encrypt"
 	"medusa/pkg/vaultengine"
 
@@ -37,7 +36,7 @@ var exportCmd = &cobra.Command{
 
 		exportData, err := client.FolderExport(path)
 		if err != nil {
-			log.Printf("%s", err)
+			fmt.Println(err)
 			return
 		}
 

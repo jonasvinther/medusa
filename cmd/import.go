@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"medusa/pkg/encrypt"
 	"medusa/pkg/importer"
 	"medusa/pkg/vaultengine"
@@ -34,14 +35,36 @@ var importCmd = &cobra.Command{
 		client.UseEngine(engine)
 
 		var parsedYaml importer.ParsedYaml
+		// var err error
+
 		if doDecrypt {
 			// Decrypt the data before parsing
-			decryptedData := encrypt.Decrypt(privateKey, file)
-			parsedYaml, _ = importer.ImportYaml([]byte(decryptedData))
+			decryptedData, err := encrypt.Decrypt(privateKey, file)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			// Import and parse the data
+			parsedYaml, _ = importer.Import([]byte(decryptedData))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 		} else {
-			// Import plain data
-			data, _ := importer.ReadFromFile(file)
-			parsedYaml, _ = importer.ImportYaml(data)
+			// Read unencrypted data from file
+			data, err := importer.ReadFromFile(file)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			// Import and parse the data
+			parsedYaml, err = importer.Import(data)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
 		}
 
 		// Write the parsed yaml to Vault using the Vault engine

@@ -3,7 +3,6 @@ package encrypt
 import (
 	"bufio"
 	b64 "encoding/base64"
-	"log"
 	"os"
 )
 
@@ -26,12 +25,12 @@ func Encrypt(publicKeyPath string, output string, data []byte) (encryptedKey, en
 	return b64key, sEnc
 }
 
-func Decrypt(privateKeyPath string, output string) string {
+func Decrypt(privateKeyPath string, output string) (string, error) {
 	// Decrypt
 	file, err := os.Open(output)
 
 	if err != nil {
-		log.Fatalf("failed opening file: %s", err)
+		return "", err
 	}
 
 	scanner := bufio.NewScanner(file)
@@ -52,5 +51,5 @@ func Decrypt(privateKeyPath string, output string) string {
 	decryptedKey, _ := RsaDecrypt(string(decryptKey), privateKey)
 	decrypted, _ := AesDecrypt(decryptData, decryptedKey)
 
-	return string(decrypted)
+	return string(decrypted), nil
 }
