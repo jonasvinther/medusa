@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.pem
 medusa
 bin/
 
@@ -18,5 +19,5 @@ bin/
 
 # Local config files
 .env
-*.json
+./*.json
 ./*.yaml

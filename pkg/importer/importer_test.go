@@ -31,8 +31,8 @@ B:
 // 	},
 // }
 
-func TestDoImportYaml(t *testing.T) {
-	_, err := doImportYaml(testYaml)
+func TestImport(t *testing.T) {
+	_, err := Import(testYaml)
 
 	if err != nil {
 		t.Error("Failed parsing yaml")

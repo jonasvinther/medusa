@@ -29,7 +29,7 @@ You can configure Medusa in the commands you run like this :
 
 Use them like this:
 ```
-/medusa import secret ./test/data/import-example-1.yaml -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
+./medusa import secret ./test/data/import-example-1.yaml -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
 ./medusa export secret/A -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --format="json" --insecure
 ```
 

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"medusa/pkg/encrypt"
 	"medusa/pkg/importer"
 	"medusa/pkg/vaultengine"
 	"strings"
@@ -10,6 +12,8 @@ import (
 
 func init() {
 	rootCmd.AddCommand(importCmd)
+	importCmd.PersistentFlags().BoolP("decrypt", "d", false, "Decrypt the Vault data before importing")
+	importCmd.PersistentFlags().StringP("private-key", "p", "", "Location of the RSA private key")
 }
 
 var importCmd = &cobra.Command{
@@ -23,16 +27,49 @@ var importCmd = &cobra.Command{
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
 		insecure, _ := cmd.Flags().GetBool("insecure")
+		doDecrypt, _ := cmd.Flags().GetBool("decrypt")
+		privateKey, _ := cmd.Flags().GetString("private-key")
 
 		engine, prefix := vaultengine.PathSplitPrefix(path)
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
 		client.UseEngine(engine)
-		parsedYaml, _ := importer.ImportYaml(file)
 
-		// Write the data to Vault using the Vault engine
+		var parsedYaml importer.ParsedYaml
+		// var err error
+
+		if doDecrypt {
+			// Decrypt the data before parsing
+			decryptedData, err := encrypt.Decrypt(privateKey, file)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			// Import and parse the data
+			parsedYaml, _ = importer.Import([]byte(decryptedData))
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		} else {
+			// Read unencrypted data from file
+			data, err := importer.ReadFromFile(file)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			// Import and parse the data
+			parsedYaml, err = importer.Import(data)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		}
+
+		// Write the parsed yaml to Vault using the Vault engine
 		for path, value := range parsedYaml {
-			path = strings.TrimPrefix(path, "/")
-			path = prefix + path
+			path = prefix + strings.TrimPrefix(path, "/")
 			client.SecretWrite(path, value)
 		}
 	},

@@ -1,6 +1,6 @@
 package vaultengine
 
-import "log"
+import "fmt"
 
 // SecretWrite is used for writing data to a Vault instance
 func (client *Client) SecretWrite(path string, data map[string]interface{}) {
@@ -11,8 +11,8 @@ func (client *Client) SecretWrite(path string, data map[string]interface{}) {
 
 	_, err := client.vc.Logical().Write(finalPath, finalData)
 	if err != nil {
-		log.Printf("Error while writing secret. %s", err)
+		fmt.Printf("Error while writing secret. %s\n", err)
 	} else {
-		log.Printf("Secret successfully written to Vault instance on path [%s]", path)
+		fmt.Printf("Secret successfully written to Vault [%s] using path [%s]\n", client.addr, path)
 	}
 }

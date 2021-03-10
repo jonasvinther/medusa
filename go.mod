@@ -10,4 +10,5 @@ require (
 	google.golang.org/api v0.13.0
 	gopkg.in/yaml.v2 v2.3.0
 	k8s.io/gengo v0.0.0-20201203183100-97869a43a9d9 // indirect
+	sigs.k8s.io/yaml v1.2.0
 )
