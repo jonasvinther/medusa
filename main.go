@@ -1,9 +1,17 @@
 package main
 
-import "medusa/cmd"
+import (
+	"fmt"
+	"medusa/cmd"
+	"os"
+)
 
 func main() {
-	cmd.Execute()
+	err := cmd.Execute()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	// key := encrypt.NewAesEncryptionKey()
 	// text := []byte("Hello from Medusa")

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"medusa/pkg/encrypt"
 	"medusa/pkg/vaultengine"
@@ -21,7 +22,7 @@ var exportCmd = &cobra.Command{
 	Short: "Export Vault secrets as yaml",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		path := args[0]
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
@@ -37,7 +38,7 @@ var exportCmd = &cobra.Command{
 		exportData, err := client.FolderExport(path)
 		if err != nil {
 			fmt.Println(err)
-			return
+			return err
 		}
 
 		// Convert export to json or yaml
@@ -49,12 +50,12 @@ var exportCmd = &cobra.Command{
 			data, err = vaultengine.ConvertToYaml(exportData)
 		default:
 			fmt.Printf("Wrong format '%s' specified. Available formats are yaml and json.\n", exportFormat)
-			return
+			err = errors.New("invalid export format")
 		}
 
 		if err != nil {
 			fmt.Println(err)
-			return
+			return err
 		}
 
 		if doEncrypt {
@@ -67,18 +68,35 @@ var exportCmd = &cobra.Command{
 			} else {
 				// Write to file
 				// First encrypted data
-				vaultengine.WriteToFile(output, []byte(encryptedData))
-				vaultengine.AppendStringToFile(output, "\n")
+				err = vaultengine.WriteToFile(output, []byte(encryptedData))
+				if err != nil {
+					return err
+				}
+				err = vaultengine.AppendStringToFile(output, "\n")
+				if err != nil {
+					return err
+				}
 				// Then encrypted AES key
-				vaultengine.AppendStringToFile(output, encryptedKey)
-				vaultengine.AppendStringToFile(output, "\n")
+				err = vaultengine.AppendStringToFile(output, encryptedKey)
+				if err != nil {
+					return err
+				}
+				err = vaultengine.AppendStringToFile(output, "\n")
+				if err != nil {
+					return err
+				}
 			}
 		} else {
 			if output == "" {
 				fmt.Println(string(data))
 			} else {
-				vaultengine.WriteToFile(output, data)
+				err = vaultengine.WriteToFile(output, data)
+				if err != nil {
+					return err
+				}
 			}
 		}
+
+		return nil
 	},
 }

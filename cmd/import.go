@@ -21,7 +21,7 @@ var importCmd = &cobra.Command{
 	Short: "Import a yaml file into a Vault instance",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(2),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		path := args[0]
 		file := args[1]
 		vaultAddr, _ := cmd.Flags().GetString("address")
@@ -42,28 +42,28 @@ var importCmd = &cobra.Command{
 			decryptedData, err := encrypt.Decrypt(privateKey, file)
 			if err != nil {
 				fmt.Println(err)
-				return
+				return err
 			}
 
 			// Import and parse the data
-			parsedYaml, _ = importer.Import([]byte(decryptedData))
+			parsedYaml, err = importer.Import([]byte(decryptedData))
 			if err != nil {
 				fmt.Println(err)
-				return
+				return err
 			}
 		} else {
 			// Read unencrypted data from file
 			data, err := importer.ReadFromFile(file)
 			if err != nil {
 				fmt.Println(err)
-				return
+				return err
 			}
 
 			// Import and parse the data
 			parsedYaml, err = importer.Import(data)
 			if err != nil {
 				fmt.Println(err)
-				return
+				return err
 			}
 		}
 
@@ -72,5 +72,7 @@ var importCmd = &cobra.Command{
 			path = prefix + strings.TrimPrefix(path, "/")
 			client.SecretWrite(path, value)
 		}
+
+		return nil
 	},
 }
