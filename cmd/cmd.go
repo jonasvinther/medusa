@@ -17,19 +17,28 @@ Created by Jonas Vinther & Henrik Høegh.`,
 		address, _ := cmd.Flags().GetString("address")
 		if viper.IsSet("VAULT_ADDR") && address == "" {
 			value := viper.Get("VAULT_ADDR").(string)
-			cmd.Flags().Set("address", value)
+			err := cmd.Flags().Set("address", value)
+			if err != nil {
+				return err
+			}
 		}
 
 		token, _ := cmd.Flags().GetString("token")
 		if viper.IsSet("VAULT_TOKEN") && token == "" {
 			value := viper.Get("VAULT_TOKEN").(string)
-			cmd.Flags().Set("token", value)
+			err := cmd.Flags().Set("token", value)
+			if err != nil {
+				return err
+			}
 		}
 
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		if viper.IsSet("VAULT_SKIP_VERIFY") && insecure == false {
 			value := viper.GetBool("VAULT_SKIP_VERIFY")
-			cmd.Flags().Set("insecure", strconv.FormatBool(value))
+			err := cmd.Flags().Set("insecure", strconv.FormatBool(value))
+			if err != nil {
+				return err
+			}
 		}
 
 		return nil
