@@ -12,7 +12,7 @@
   * [Setting up Medusa](#setting-up-medusa)
   * [Importing data](#importing-data)
   * [Exporting data](#exporting-data)
-  * [Kubernetes cronjob example](docs/examples/kubernetes/cronjob/README.md)
+  * [Kubernetes cronjob example](docs/examples/kubernetes/cronjob/)
 - [Secure secret management outside Vault](#secure-secret-management-outside-vault)
 - [Help](#help)
 - [How to contribute](#how-to-contribute)
