@@ -1,0 +1,47 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: medusa
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+          - name: medusa
+            image: jonasvinther/medusa:latest
+            imagePullPolicy: IfNotPresent
+            command: ["./medusa", "export", "$(VAULT_PATH)", "-o", "/backup/backup.vault"]
+            env:
+            - name: VAULT_SKIP_VERIFY
+              valueFrom:
+                configMapKeyRef:
+                  name: vault
+                  key: vault_skip_verify
+            - name: VAULT_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: vault
+                  key: vault-url
+            - name: VAULT_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: vault
+                  key: vault-path
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vault
+                  key: token
+            volumeMounts:
+              - name: backup
+                mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: backup
+            hostPath:
+              path: /backup
+              type: DirectoryOrCreate
