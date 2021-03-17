@@ -5,6 +5,18 @@
 [![Build status](https://github.com/jonasvinther/medusa/workflows/Go/badge.svg)](https://github.com/jonasvinther/medusa/actions)
 [![codecov](https://codecov.io/gh/jonasvinther/medusa/branch/main/graph/badge.svg)](https://codecov.io/gh/jonasvinther/medusa)
 
+# Table of Contents
+
+- [About](#about)
+- [How to use](#how-to-use)
+  * [Setting up Medusa](#setting-up-medusa)
+  * [Importing data](#importing-data)
+  * [Exporting data](#exporting-data)
+  * [Kubernetes cronjob example](docs/examples/kubernetes/cronjob/)
+- [Secure secret management outside Vault](#secure-secret-management-outside-vault)
+- [Help](#help)
+- [How to contribute](#how-to-contribute)
+
 ## About
 Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
 
@@ -135,7 +147,7 @@ Use them like this:
 ./medusa import kv encrypted-vault-secrets.txt --address="https://my-vault-server.com" --token="00000000-0000-0000-0000-000000000000" --insecure --decrypt="true" --private-key="private-key.pem"
 ```
 
-## Medusa help
+## Help
 To test out `medusa` on your laptop
 ```
 Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
