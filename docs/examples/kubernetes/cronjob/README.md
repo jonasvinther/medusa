@@ -9,7 +9,7 @@ First off we will create a Configmap to define three values used by the Cronjob,
 
 These three values will be used as environment variables in the container run by the Job.
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -28,7 +28,7 @@ kubectl apply -f configmap.yaml
 ## Creating a Secret
 We need a token to access the target Vault instance. In this case we will store that in a Kubernets Secret like this:
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -49,7 +49,7 @@ kubectl apply -f secret.yaml
 
 ### Deploying the Cronjob
 Here we create a Cronjob manifest that defines Jobs to be run every hour. It runs `Medusa` and is configured by the environment variables it gets from our Configmap and Secret. It finds data in Vault at the given path from the Configmap as well, and saves them to the hostPath volume at `/backup`.
-```
+```yaml
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
