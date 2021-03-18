@@ -1,4 +1,4 @@
-![medusa logo](https://repository-images.githubusercontent.com/314548908/b9872d00-87e0-11eb-9e42-c377d20b9b28)
+![medusa logo](https://raw.githubusercontent.com/jonasvinther/medusa/main/assets/logo/medusa-icon-240.png)
 
 # Medusa
 
