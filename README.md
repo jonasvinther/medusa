@@ -17,7 +17,7 @@
   * [Kubernetes cronjob example](docs/examples/kubernetes/cronjob/)
 - [Secure secret management outside Vault](#secure-secret-management-outside-vault)
 - [Help](#help)
-- [How to contribute](#how-to-contribute)
+- [How to contribute](docs/CONTRIBUTING.md)
 
 ## About
 Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
@@ -171,6 +171,3 @@ Flags:
 
 Use "medusa [command] --help" for more information about a command.
 ``` 
-
-## How to contribute
-Please read and follow our [contributing guide](docs/CONTRIBUTING.md)
