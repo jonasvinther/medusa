@@ -7,14 +7,15 @@
 [![Build status](https://github.com/jonasvinther/medusa/workflows/Go/badge.svg)](https://github.com/jonasvinther/medusa/actions)
 [![codecov](https://codecov.io/gh/jonasvinther/medusa/branch/main/graph/badge.svg)](https://codecov.io/gh/jonasvinther/medusa)
 
-# Table of Contents
+## Table of Contents
 
 - [About](#about)
 - [How to use](#how-to-use)
   * [Setting up Medusa](#setting-up-medusa)
   * [Importing data](#importing-data)
   * [Exporting data](#exporting-data)
-  * [Kubernetes cronjob example](docs/examples/kubernetes/cronjob/)
+  * [Kubernetes examples](docs/examples/kubernetes/cronjob/)
+  * [Docker examples](docs/examples/docker/)
 - [Secure secret management outside Vault](#secure-secret-management-outside-vault)
 - [Help](#help)
 - [How to contribute](docs/CONTRIBUTING.md)
