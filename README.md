@@ -1,3 +1,5 @@
+![medusa logo](https://raw.githubusercontent.com/jonasvinther/medusa/main/assets/logo/medusa-icon-240.png)
+
 # Medusa
 
 [![GoDoc](https://godoc.org/github.com/jonasvinther/medusa?status.svg)](https://godoc.org/github.com/jonasvinther/medusa)
