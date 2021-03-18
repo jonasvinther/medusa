@@ -56,6 +56,8 @@ metadata:
   name: medusa
 spec:
   schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
   jobTemplate:
     spec:
       template:
