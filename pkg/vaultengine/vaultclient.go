@@ -6,12 +6,13 @@ import (
 
 // Client describes the arguments that is needed to to establish a connecting to a Vault instance
 type Client struct {
-	token     string
-	addr      string
-	namespace string
-	engine    string
-	insecure  bool
-	vc        *vault.Client
+	token      string
+	addr       string
+	namespace  string
+	engine     string
+	engineType string
+	insecure   bool
+	vc         *vault.Client
 }
 
 // NewClient creates a instance of the VaultClient struct
@@ -29,6 +30,11 @@ func NewClient(addr, token string, insecure bool) *Client {
 // UseEngine defines which engine the Vault client will use
 func (client *Client) UseEngine(engine string) {
 	client.engine = engine
+}
+
+// SetEngineType defines which vault secret engine type that is being used
+func (client *Client) SetEngineType(engineType string) {
+	client.engineType = engineType
 }
 
 func (client *Client) newVaultClient() error {

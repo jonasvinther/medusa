@@ -21,7 +21,8 @@
 - [How to contribute](docs/CONTRIBUTING.md)
 
 ## About
-Medusa is a cli tool currently for importing a json or yaml file into HashiCorp Vault.
+Medusa is a cli tool currently for importing and exporting a json or yaml file into HashiCorp Vault.  
+Medusa currently supports kv1 and kv2 Vault secret engines.
 
 ## How to use
 ### Setting up Medusa
@@ -60,6 +61,20 @@ Use them like this:
 ### Importing data
 > Get help with `./medusa import -h`
 Medusa import will take a [vault path] with [flags]
+
+```
+  Flags:
+  -d, --decrypt              Decrypt the Vault data before importing
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -h, --help                 help for import
+  -p, --private-key string   Location of the RSA private key
+
+  Global Flags:
+  -a, --address string       Address of the Vault server
+  -k, --insecure             Allow insecure server connections when using SSL
+  -t, --token string         Vault authentication token
+```
+
 Example:
 ```
 ./medusa import secret ./test/data/import-example-1.yaml -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
@@ -81,6 +96,22 @@ Example:
 ### Exporting data
 > Get help with `./medusa export -h` and yaml is the default output format
 Medusa import will take a [vault path] with [flags]
+
+```
+  Flags:
+  -e, --encrypt              Encrypt the exported Vault data
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -f, --format string        Specify the export format [yaml|json] (default "yaml")
+  -h, --help                 help for export
+  -o, --output string        Write to file instead of stdout
+  -p, --public-key string    Location of the RSA public key
+
+  Global Flags:
+  -a, --address string   Address of the Vault server
+  -k, --insecure         Allow insecure server connections when using SSL
+  -t, --token string     Vault authentication token
+```
+
 Example:
 
 ```
