@@ -6,7 +6,13 @@ import (
 
 //FolderRead reads the subpaths and secrets of the provided path
 func (client *Client) FolderRead(path string) ([]interface{}, error) {
-	finalPath := client.engine + "/metadata/" + path
+	infix := "/metadata/"
+
+	if client.engineType == "kv1" {
+		infix = ""
+	}
+
+	finalPath := client.engine + infix + path
 
 	secret, err := client.vc.Logical().List(finalPath)
 	if err != nil {

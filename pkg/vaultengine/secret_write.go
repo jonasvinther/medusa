@@ -4,7 +4,13 @@ import "fmt"
 
 // SecretWrite is used for writing data to a Vault instance
 func (client *Client) SecretWrite(path string, data map[string]interface{}) {
-	finalPath := client.engine + "/data/" + path
+	infix := "/data/"
+
+	if client.engineType == "kv1" {
+		infix = ""
+	}
+
+	finalPath := client.engine + infix + path
 
 	finalData := make(map[string]interface{})
 	finalData["data"] = data

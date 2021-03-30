@@ -14,6 +14,7 @@ func init() {
 	rootCmd.AddCommand(importCmd)
 	importCmd.PersistentFlags().BoolP("decrypt", "d", false, "Decrypt the Vault data before importing")
 	importCmd.PersistentFlags().StringP("private-key", "p", "", "Location of the RSA private key")
+	importCmd.PersistentFlags().StringP("engine-type", "m", "kv2", "Specify the secret engine type [kv1|kv2]")
 }
 
 var importCmd = &cobra.Command{
@@ -27,12 +28,14 @@ var importCmd = &cobra.Command{
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
 		insecure, _ := cmd.Flags().GetBool("insecure")
+		engineType, _ := cmd.Flags().GetString("engine-type")
 		doDecrypt, _ := cmd.Flags().GetBool("decrypt")
 		privateKey, _ := cmd.Flags().GetString("private-key")
 
 		engine, prefix := vaultengine.PathSplitPrefix(path)
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
 		client.UseEngine(engine)
+		client.SetEngineType(engineType)
 
 		var parsedYaml importer.ParsedYaml
 		// var err error
