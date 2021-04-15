@@ -6,10 +6,10 @@ import (
 
 // SecretRead is used for reading a secret from a Vault instance
 func (client *Client) SecretRead(path string) map[string]interface{} {
-	infix := "/data"
+	infix := "/data/"
 
 	if client.engineType == "kv1" {
-		infix = ""
+		infix = "/"
 	}
 
 	finalPath := client.engine + infix + path
