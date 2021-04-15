@@ -1,13 +1,15 @@
 package vaultengine
 
-import "log"
+import (
+	"log"
+)
 
 // SecretRead is used for reading a secret from a Vault instance
 func (client *Client) SecretRead(path string) map[string]interface{} {
 	infix := "/data/"
 
 	if client.engineType == "kv1" {
-		infix = ""
+		infix = "/"
 	}
 
 	finalPath := client.engine + infix + path
@@ -23,7 +25,7 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 
 	m, ok := secret.Data["data"].(map[string]interface{})
 	if !ok {
-		log.Fatalf("%T %#v", secret.Data["data"], secret.Data["data"])
+		log.Fatalf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
 	}
 
 	return m
