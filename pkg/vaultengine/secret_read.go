@@ -23,10 +23,14 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 		log.Fatalf("No secret found using path [%s] on Vault instance [%s]. Medusa will terminate now.", path, client.addr)
 	}
 
-	m, ok := secret.Data["data"].(map[string]interface{})
-	if !ok {
-		log.Fatalf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
-	}
+	if client.engineType == "kv1" {
+		return secret.Data
+	} else {
+		m, ok := secret.Data["data"].(map[string]interface{})
+		if !ok {
+			log.Fatalf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
+		}
 
-	return m
+		return m
+	}
 }
