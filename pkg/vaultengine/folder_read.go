@@ -9,7 +9,7 @@ func (client *Client) FolderRead(path string) ([]interface{}, error) {
 	infix := "/metadata/"
 
 	if client.engineType == "kv1" {
-		infix = ""
+		infix = "/"
 	}
 
 	finalPath := client.engine + infix + path
