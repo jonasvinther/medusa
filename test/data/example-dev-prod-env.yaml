@@ -1,0 +1,93 @@
+production:
+  env:
+    platform:
+      nomad:
+        type: platform
+        serveradd: prod.nomad.local
+      consul:
+        type: service
+        serveradd: prod.consul.local
+      vault:
+        type: secrets
+        serveradd: prod.vault.local
+      nats:
+        type: queue
+        serveradd: nats.service.prod.consul
+        postgresql:type: database
+        serveradd: db.service.prod.consul
+  users:
+    root:
+      dbuser: admin
+      dbpass: 123secret
+      domains:
+    cart:
+      database:
+        dbname: cartdb
+        users:
+          readuser:
+            dbuser: bob
+            dbpass: 12345
+          writeuser:
+            dbuser: sally
+            dbpass: 12345pwd
+    user:
+      database:
+        dbname: userdb
+        users:
+          readuser:
+            dbuser: niels
+            dbpass: 12345
+    ui:
+      database:
+        dbname: uidb
+        users:
+          readuser:
+            dbuser: peter
+            dbpass: passw0rd
+dev:
+  env:
+    platform:
+      nomad:
+        type: platform
+        serveradd: nomad.192.168.1.45.nip.io
+      consul:
+        type: service
+        serveradd: consul.192.168.1.45.nip.io
+      vault:
+        type: secrets
+        serveradd: vault.192.168.1.46.nip.io
+      nats:
+        type: queue
+        serveradd: nats.service.prod.consul
+      postgresql:
+        type: database
+        serveradd: db.service.dev.consul
+  users:
+    root:
+      dbuser: admin
+      dbpass: 123lesssecret
+      domains:
+    cart:
+      database:
+        dbname: cartdb
+        users:
+          readuser:
+            dbuser: bob
+            dbpass: 12345
+          writeuser:
+            dbuser: sally
+            dbpass: 12345pwd
+    user:
+      database:
+        dbname: userdb
+        users:
+          readuser:
+            dbuser: niels
+            dbpass: hunter2
+    ui:
+      database:
+        dbname: uidb
+        users:
+          readuser:
+            dbuser: peter
+            dbpass: 12345
