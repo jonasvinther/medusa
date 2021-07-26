@@ -13,7 +13,12 @@ func (client *Client) SecretWrite(path string, data map[string]interface{}) {
 	finalPath := client.engine + infix + path
 
 	finalData := make(map[string]interface{})
-	finalData["data"] = data
+
+	if client.engineType == "kv1" {
+		finalData = data
+	} else {
+		finalData["data"] = data
+	}
 
 	_, err := client.vc.Logical().Write(finalPath, finalData)
 	if err != nil {
