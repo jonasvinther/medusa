@@ -25,6 +25,9 @@ Medusa is a cli tool currently for importing and exporting a json or yaml file i
 Medusa currently supports kv1 and kv2 Vault secret engines.
 
 ## How to use
+In this section you can read about how to configure and use Medusa.  
+You can also watch the [Medusa 101 introduction video](https://youtu.be/ynoe3fs_YHg) to get a quick introduction on how to use Medusa for importing and exporting secrets in HashiCorp Vault.
+
 ### Setting up Medusa
 #### Config file
 It's possible to create a config file for Medusa to read in your homefolder `~/.medusa/config.yaml` that looks like this
