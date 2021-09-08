@@ -69,6 +69,11 @@ func (client *Client) pathReader(parentFolder *Folder, path string) error {
 				return err
 			}
 
+			if (*parentFolder)[keyName] != nil {
+				for key, elem := range (*parentFolder)[keyName].(map[string]interface{}) {
+					subFolder[key] = elem
+			    }
+            }
 			(*parentFolder)[keyName] = subFolder
 		} else {
 			s := client.SecretRead(newPath)
