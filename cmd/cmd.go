@@ -41,15 +41,6 @@ Created by Jonas Vinther & Henrik Høegh.`,
 			}
 		}
 
-		namespace, _ := cmd.Flags().GetString("namespace")
-		if viper.IsSet("VAULT_NAMESPACE") && namespace == "" {
-			value := viper.Get("VAULT_NAMESPACE").(string)
-			err := cmd.Flags().Set("namespace", value)
-			if err != nil {
-				return err
-			}
-		}		
-
 		return nil
 	},
 }
@@ -63,7 +54,6 @@ func init() {
 	rootCmd.PersistentFlags().StringP("address", "a", "", "Address of the Vault server")
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Vault authentication token")
 	rootCmd.PersistentFlags().BoolP("insecure", "k", false, "Allow insecure server connections when using SSL")
-	rootCmd.PersistentFlags().StringP("namespace", "n", "", "Namespace within the Vault server (Enterprise only)")
 
 	// AutomaticEnv makes Viper load environment variables
 	viper.AutomaticEnv()
