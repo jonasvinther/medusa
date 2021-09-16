@@ -28,13 +28,12 @@ var importCmd = &cobra.Command{
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
 		insecure, _ := cmd.Flags().GetBool("insecure")
-		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
 		doDecrypt, _ := cmd.Flags().GetBool("decrypt")
 		privateKey, _ := cmd.Flags().GetString("private-key")
 
 		engine, prefix := vaultengine.PathSplitPrefix(path)
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 
