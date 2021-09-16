@@ -28,13 +28,14 @@ var exportCmd = &cobra.Command{
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
 		insecure, _ := cmd.Flags().GetBool("insecure")
+		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
 		doEncrypt, _ := cmd.Flags().GetBool("encrypt")
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 
 		engine, path := vaultengine.PathSplitPrefix(path)
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 
