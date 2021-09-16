@@ -16,11 +16,12 @@ type Client struct {
 }
 
 // NewClient creates a instance of the VaultClient struct
-func NewClient(addr, token string, insecure bool) *Client {
+func NewClient(addr, token string, insecure bool, namespace string) *Client {
 	client := &Client{
 		token:    token,
 		addr:     addr,
-		insecure: insecure}
+		insecure: insecure,
+		namespace: namespace}
 
 	client.newVaultClient()
 
@@ -52,9 +53,9 @@ func (client *Client) newVaultClient() error {
 
 	client.vc = vc
 
-	// if client.namespace != "" {
-	// 	client.vc.SetNamespace(client.namespace)
-	// }
+	if client.namespace != "" {
+		client.vc.SetNamespace(client.namespace)
+	}
 
 	if client.token != "" {
 		client.vc.SetToken(client.token)
