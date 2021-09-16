@@ -10,7 +10,7 @@
 ## Table of Contents
 
 - [About](#about)
-- [Support](#support)
+- [Supported HashiCorp Vault versions](#supported-hashicorp-vault-versions)
 - [How to use](#how-to-use)
   * [Setting up Medusa](#setting-up-medusa)
   * [Importing data](#importing-data)
@@ -25,7 +25,7 @@
 Medusa is a cli tool currently for importing and exporting a json or yaml file into HashiCorp Vault.  
 Medusa currently supports kv1 and kv2 Vault secret engines.
 
-## Support
+## Supported HashiCorp Vault versions
 The minimum required HashiCorp Vault version that is supported by Medusa is Vault version 0.10.0. Medusa has not been tested with earlier verisons than Vault version 0.10.0.
 
 ## How to use
