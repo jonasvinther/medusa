@@ -29,17 +29,17 @@ jobs:
             dep ensure
         fi
 
-    - name: Build
-      run: go build -v .
-
-    - name: Test
-      run: go test -v ./...
-
     - name: Start Vault container
       run: docker-compose -f scripts/docker-compose.yml up -d 
       env:
         VAULT_TOKEN: my-root-token
         VAULT_VOLUME: /tmp/vault/data/vault-volume
+
+    - name: Build
+      run: go build -v .
+
+    - name: Test
+      run: go test -v ./...
     
     - name: Debug
       run: docker ps -a
