@@ -170,7 +170,7 @@ Deleting secret [secret/production/users/cart/database/users/readuser]
 Deleting secret [secret/production/users/cart/database/users/writeuser]
 Deleting secret [secret/production/users/user/database]
 Deleting secret [secret/production/users/user/database/users/readuser]
-? Do you want to delete the 25 secrets listed above? Only 'y' will be accepted to approve.? [y/N] y█
+? Do you want to delete the 25 secrets listed above? Only 'y' will be accepted to approve.? [y/N] y
 The secrets has now been deleted
 
 
