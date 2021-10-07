@@ -3,8 +3,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"medusa/pkg/encrypt"
-	"medusa/pkg/vaultengine"
+	"github.com/jonasvinther/medusa/pkg/encrypt"
+	"github.com/jonasvinther/medusa/pkg/vaultengine"
 
 	"github.com/spf13/cobra"
 )
