@@ -2,6 +2,7 @@ package vaultengine
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -84,6 +85,14 @@ func PathJoin(p ...string) string {
 		return strings.TrimPrefix(path.Join(p...)+"/", "/")
 	}
 	return strings.TrimPrefix(path.Join(p...), "/")
+}
+
+// CleanupPath cleans up unwanted characters so that the path looks nice and clean
+func CleanupPath(path string) string {
+	if !strings.HasPrefix(path, "/") {
+		path = fmt.Sprintf("/%s", path)
+	}
+	return strings.ReplaceAll(path, "//", "/")
 }
 
 // EnsureFolder ensures a path is a folder (adds a trailing "/").

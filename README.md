@@ -13,8 +13,9 @@
 - [Supported HashiCorp Vault versions](#supported-hashicorp-vault-versions)
 - [How to use](#how-to-use)
   * [Setting up Medusa](#setting-up-medusa)
-  * [Importing data](#importing-data)
-  * [Exporting data](#exporting-data)
+  * [Importing secrets](#importing-secrets)
+  * [Exporting secrets](#exporting-secrets)
+  * [Deleting secrets](#deleting-secrets)
   * [Kubernetes examples](docs/examples/kubernetes/cronjob/)
   * [Docker examples](docs/examples/docker/)
 - [Secure secret management outside Vault](#secure-secret-management-outside-vault)
@@ -65,7 +66,7 @@ Use them like this:
 ./medusa export secret/A --address="https://0.0.0.0:8201" --token="00000000-0000-0000-0000-000000000000" --format="json" --insecure
 ```
 
-### Importing data
+### Importing secrets
 > Get help with `./medusa import -h`
 Medusa import will take a [vault path] with [flags]
 
@@ -79,6 +80,7 @@ Medusa import will take a [vault path] with [flags]
   Global Flags:
   -a, --address string       Address of the Vault server
   -k, --insecure             Allow insecure server connections when using SSL
+  -n, --namespace string     Namespace within the Vault server (Enterprise only)
   -t, --token string         Vault authentication token
 ```
 
@@ -100,7 +102,7 @@ Example:
 2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/Xa/Z]
 ```
 
-### Exporting data
+### Exporting secrets
 > Get help with `./medusa export -h` and yaml is the default output format
 Medusa import will take a [vault path] with [flags]
 
@@ -114,9 +116,10 @@ Medusa import will take a [vault path] with [flags]
   -p, --public-key string    Location of the RSA public key
 
   Global Flags:
-  -a, --address string   Address of the Vault server
-  -k, --insecure         Allow insecure server connections when using SSL
-  -t, --token string     Vault authentication token
+  -a, --address string       Address of the Vault server
+  -k, --insecure             Allow insecure server connections when using SSL
+  -n, --namespace string     Namespace within the Vault server (Enterprise only)
+  -t, --token string         Vault authentication token
 ```
 
 Example:
@@ -140,6 +143,44 @@ A:
     Z:
       Za: value 1
       Zb: value 2
+```
+
+### Deleting secrets
+> Get help with `./medusa delete -h`
+Medusa import will take a [vault path] with [flags]
+
+```
+  Flags:
+  -y, --auto-approve         Skip interactive approval of plan before deletion
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -h, --help                 help for import
+
+  Global Flags:
+  -a, --address string       Address of the Vault server
+  -k, --insecure             Allow insecure server connections when using SSL
+  -n, --namespace string     Namespace within the Vault server (Enterprise only)
+  -t, --token string         Vault authentication token
+```
+
+Example:
+```
+./medusa delete secret/production --address="https://0.0.0.0:8201" --token="00000000-0000-0000-0000-000000000000" --insecure
+Deleting secret [secret/production/users/cart/database]
+Deleting secret [secret/production/users/cart/database/users/readuser]
+Deleting secret [secret/production/users/cart/database/users/writeuser]
+Deleting secret [secret/production/users/user/database]
+Deleting secret [secret/production/users/user/database/users/readuser]
+? Do you want to delete the 25 secrets listed above? Only 'y' will be accepted to approve.? [y/N] y█
+The secrets has now been deleted
+
+
+./medusa delete secret/staging --address="https://0.0.0.0:8201" --token="00000000-0000-0000-0000-000000000000" --insecure --auto-approve
+Deleting secret [secret/staging/users/cart/database]
+Deleting secret [secret/staging/users/cart/database/users/readuser]
+Deleting secret [secret/staging/users/cart/database/users/writeuser]
+Deleting secret [secret/staging/users/user/database]
+Deleting secret [secret/staging/users/user/database/users/readuser]
+The secrets has now been deleted
 ```
 
 ## Secure secret management outside Vault
