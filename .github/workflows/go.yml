@@ -79,3 +79,9 @@ jobs:
         file: ./coverage.txt
         token: ${{secrets.CODECOV}}
         fail_ci_if_error: true
+    
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@v1.0.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
