@@ -15,6 +15,7 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 	finalPath := client.engine + infix + path
 
 	secret, err := client.vc.Logical().Read(finalPath)
+	// fmt.Printf("%+v", secret)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
