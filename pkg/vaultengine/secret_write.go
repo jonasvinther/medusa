@@ -9,7 +9,7 @@ func (client *Client) SecretWrite(path string, data map[string]interface{}) {
 	infix := "/data/"
 
 	if client.engineType == "kv1" {
-		infix = ""
+		infix = "/"
 	}
 
 	finalPath := client.engine + infix + path
@@ -22,28 +22,31 @@ func (client *Client) SecretWrite(path string, data map[string]interface{}) {
 		finalData["data"] = data
 	}
 
-	if val, ok := data["json-object"]; ok {
-		var f string
+	// If the data object has the json-object key
+	// it means that the secret is not in the default
+	// key/value format.
+	if jsonVal, ok := data["json-object"]; ok {
+		var jsonString string
 
+		// The kv2 engine needs the data wrapped in a "data" key
 		if client.engineType == "kv2" {
-			f = fmt.Sprintf("{\"data\":%s}", val)
+			jsonString = fmt.Sprintf("{\"data\":%s}", jsonVal)
 		} else {
-			f = val.(string)
+			jsonString = jsonVal.(string)
 		}
 
-		_, err := client.vc.Logical().WriteBytes(finalPath, []byte(f))
+		_, err := client.vc.Logical().WriteBytes(finalPath, []byte(jsonString))
 		if err != nil {
 			fmt.Printf("Error while writing secret. %s\n", err)
 		} else {
-			fmt.Printf("Secret (in json format) successfully written to Vault [%s] using path [%s]\n", client.addr, path)
+			fmt.Printf("Secret successfully written to Vault [%s] using path [%s]\n", client.addr, path)
 		}
 	} else {
-		// fmt.Printf("No json: %+v \n", data)
 		_, err := client.vc.Logical().Write(finalPath, finalData)
 		if err != nil {
-			fmt.Printf("Error while writing secret. %s\n\n", err)
+			fmt.Printf("Error while writing secret. %s\n", err)
 		} else {
-			fmt.Printf("Secret successfully written to Vault [%s] using path [%s]\n\n", client.addr, path)
+			fmt.Printf("Secret successfully written to Vault [%s] using path [%s]\n", client.addr, path)
 		}
 	}
 }

@@ -1,0 +1,7 @@
+advanced-json:
+  json-object: '{"kind":"advanced","items":{"item1":"fruit","item2":"nuts"},"topping":[{"id":"5001","type":"None"},{"id":"5002","type":"Glazed"},{"id":"5005","type":"Sugar"},{"id":"5007","type":"PowderedSugar"},{"id":"5006","type":"Chocolate with Sprinkles"},{"id":"5003","type":"Chocolate"}]}'
+key-value:
+  item1: fruit
+  item2: nuts
+simple-json:
+  json-object: '{"kind":"simple","items":{"item1":"fruit","item2":"nuts"}}'

@@ -76,7 +76,6 @@ func (client *Client) PathReader(parentFolder *Folder, path string) error {
 			}
 			(*parentFolder)[keyName] = subFolder
 		} else {
-			fmt.Println(newPath)
 			s := client.SecretRead(newPath)
 			(*parentFolder)[strKey] = s
 		}
