@@ -147,7 +147,7 @@ A:
 
 ### Deleting secrets
 > Get help with `./medusa delete -h`
-Medusa import will take a [vault path] with [flags]
+Medusa delete will take a [vault path] with [flags]
 
 ```
   Flags:

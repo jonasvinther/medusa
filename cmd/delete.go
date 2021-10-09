@@ -16,8 +16,8 @@ func init() {
 }
 
 var deleteCmd = &cobra.Command{
-	Use:   "delete [vault path]",
-	Short: "Delete all secrets below the given path",
+	Use:   "delete [vault path] [flags]",
+	Short: "Recursively delete all secrets below the given path",
 	Long:  ``,
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
