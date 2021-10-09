@@ -1,7 +1,6 @@
 package vaultengine
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
@@ -23,17 +22,23 @@ func (client *Client) SecretWrite(path string, data map[string]interface{}) {
 		finalData["data"] = data
 	}
 
-	if val, ok := data["json-key"]; ok {
-		fmt.Println("Do json", val)
-		b, err := json.Marshal([]byte(val.(string)))
-		_, err = client.vc.Logical().WriteBytes(finalPath, b)
+	if val, ok := data["json-object"]; ok {
+		var f string
+
+		if client.engineType == "kv2" {
+			f = fmt.Sprintf("{\"data\":%s}", val)
+		} else {
+			f = val.(string)
+		}
+
+		_, err := client.vc.Logical().WriteBytes(finalPath, []byte(f))
 		if err != nil {
 			fmt.Printf("Error while writing secret. %s\n", err)
 		} else {
-			fmt.Printf("Secret successfully written to Vault [%s] using path [%s]\n", client.addr, path)
+			fmt.Printf("Secret (in json format) successfully written to Vault [%s] using path [%s]\n", client.addr, path)
 		}
 	} else {
-		fmt.Printf("No json: %+v \n", data)
+		// fmt.Printf("No json: %+v \n", data)
 		_, err := client.vc.Logical().Write(finalPath, finalData)
 		if err != nil {
 			fmt.Printf("Error while writing secret. %s\n\n", err)
