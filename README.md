@@ -6,6 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/jonasvinther/medusa)](https://goreportcard.com/report/github.com/jonasvinther/medusa)
 [![Build status](https://github.com/jonasvinther/medusa/workflows/Go/badge.svg)](https://github.com/jonasvinther/medusa/actions)
 [![codecov](https://codecov.io/gh/jonasvinther/medusa/branch/main/graph/badge.svg)](https://codecov.io/gh/jonasvinther/medusa)
+[![CodeQL](https://github.com/jonasvinther/medusa/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jonasvinther/medusa/actions/workflows/codeql-analysis.yml)
 
 ## Table of Contents
 
