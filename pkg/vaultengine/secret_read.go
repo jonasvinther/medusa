@@ -1,7 +1,9 @@
 package vaultengine
 
 import (
+	"encoding/json"
 	"log"
+	"reflect"
 )
 
 // SecretRead is used for reading a secret from a Vault instance
@@ -15,6 +17,7 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 	finalPath := client.engine + infix + path
 
 	secret, err := client.vc.Logical().Read(finalPath)
+	// fmt.Printf("%+v", secret)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -40,6 +43,37 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 		} else {
 			log.Fatalf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
 		}
+	}
+
+	// Some secrets are not in the default key/value format.
+	// We need to test every secret to verify if it differs from
+	// the default key/value format.
+	stringifyJSON := false
+	for _, element := range m {
+		rt := reflect.TypeOf(element)
+		switch rt.Kind() {
+		case reflect.Slice:
+			// fmt.Println(k, "is a slice with element type", rt.Elem())
+			stringifyJSON = true
+		case reflect.Array:
+			// fmt.Println(k, "is an array with element type", rt.Elem())
+			stringifyJSON = true
+		case reflect.Map:
+			// fmt.Println(k, "is a map with element type", rt.Elem())
+			stringifyJSON = true
+		default:
+
+		}
+	}
+
+	if stringifyJSON {
+		out, err := json.Marshal(m)
+		if err != nil {
+			panic(err)
+		}
+		tmp := make(map[string]interface{})
+		tmp["json-object"] = string(out)
+		m = tmp
 	}
 
 	return m
