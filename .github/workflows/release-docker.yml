@@ -32,4 +32,4 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.GITHUB_REF }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ GITHUB_REF }}
