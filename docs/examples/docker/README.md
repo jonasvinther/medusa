@@ -12,7 +12,7 @@ function medusa(){
     -e VAULT_ADDR=$VAULT_ADDR \
     -e VAULT_TOKEN=$VAULT_TOKEN  \
     -e VAULT_SKIP_VERIFY=$VAULT_SKIP_VERIFY  \
-    jonasvinther/medusa:latest "$@"
+    ghcr.io/jonasvinther/medusa:latest "$@"
 }
 export -f medusa
 ```
