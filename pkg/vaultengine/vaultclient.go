@@ -1,8 +1,8 @@
 package vaultengine
 
 import (
-  "errors"
-  "strings"
+	"errors"
+	"strings"
 
 	vault "github.com/hashicorp/vault/api"
 )
@@ -37,38 +37,38 @@ func (client *Client) UseEngine(engine string) {
 }
 
 func (client *Client) MountpathSplitPrefix(path string) (string, string, error) {
-  // Split Engine mountpath from path
+	// Split Engine mountpath from path
 
-  r := client.vc.NewRequest("GET", "/v1/sys/internal/ui/mounts/"+path)
-  resp, err := client.vc.RawRequest(r)
-  if resp != nil {
-    defer resp.Body.Close()
-  }
-  if err != nil {
-    // any 404 indicates k/v v1
-    if resp != nil && resp.StatusCode == 404 {
-      return "", "path", nil
-    }
-    return "", "", err
-  }
+	r := client.vc.NewRequest("GET", "/v1/sys/internal/ui/mounts/"+path)
+	resp, err := client.vc.RawRequest(r)
+	if resp != nil {
+		defer resp.Body.Close()
+	}
+	if err != nil {
+		// any 404 indicates k/v v1
+		if resp != nil && resp.StatusCode == 404 {
+			return "", "path", nil
+		}
+		return "", "", err
+	}
 
-  secret, err := vault.ParseSecret(resp.Body)
-  if err != nil {
-    return "", "", err
-  }
-  if secret == nil {
-    return "", "", errors.New("nil response from pre-flight request")
-  }
-  var mountPath string
-  if mountPathRaw, ok := secret.Data["path"]; ok {
-    mountPath = mountPathRaw.(string)
-  }
+	secret, err := vault.ParseSecret(resp.Body)
+	if err != nil {
+		return "", "", err
+	}
+	if secret == nil {
+		return "", "", errors.New("nil response from pre-flight request")
+	}
+	var mountPath string
+	if mountPathRaw, ok := secret.Data["path"]; ok {
+		mountPath = mountPathRaw.(string)
+	}
 
-  mountPath = strings.TrimSuffix(mountPath, "/")
-  suffix := strings.Replace(path, mountPath, "", 1)
-  suffix = EnsureFolder(strings.TrimPrefix(suffix, "/"))
+	mountPath = strings.TrimSuffix(mountPath, "/")
+	suffix := strings.Replace(path, mountPath, "", 1)
+	suffix = EnsureFolder(strings.TrimPrefix(suffix, "/"))
 
-  return mountPath, suffix, nil
+	return mountPath, suffix, nil
 }
 
 // SetEngineType defines which vault secret engine type that is being used

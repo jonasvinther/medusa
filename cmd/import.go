@@ -35,10 +35,10 @@ var importCmd = &cobra.Command{
 
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
 		engine, prefix, err := client.MountpathSplitPrefix(path)
-    if err != nil {
-      fmt.Println(err)
-      return err
-    }
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
 
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
