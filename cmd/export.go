@@ -34,8 +34,13 @@ var exportCmd = &cobra.Command{
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 
-		engine, path := vaultengine.PathSplitPrefix(path)
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
+		engine, path, err := client.MountpathSplitPrefix(path)
+    if err != nil {
+      fmt.Println(err)
+      return err
+    }
+
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 

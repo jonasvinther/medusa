@@ -30,8 +30,13 @@ var deleteCmd = &cobra.Command{
 		isApproved, _ := cmd.Flags().GetBool("auto-approve")
 
 		// Setup Vault client
-		engine, path := vaultengine.PathSplitPrefix(path)
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
+		engine, path, err := client.MountpathSplitPrefix(path)
+    if err != nil {
+      fmt.Println(err)
+      return err
+    }
+
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 
