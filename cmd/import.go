@@ -33,8 +33,13 @@ var importCmd = &cobra.Command{
 		doDecrypt, _ := cmd.Flags().GetBool("decrypt")
 		privateKey, _ := cmd.Flags().GetString("private-key")
 
-		engine, prefix := vaultengine.PathSplitPrefix(path)
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
+		engine, prefix, err := client.MountpathSplitPrefix(path)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 
