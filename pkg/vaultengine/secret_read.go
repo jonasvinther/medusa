@@ -50,19 +50,21 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 	// the default key/value format.
 	stringifyJSON := false
 	for _, element := range m {
-		rt := reflect.TypeOf(element)
-		switch rt.Kind() {
-		case reflect.Slice:
-			// fmt.Println(k, "is a slice with element type", rt.Elem())
-			stringifyJSON = true
-		case reflect.Array:
-			// fmt.Println(k, "is an array with element type", rt.Elem())
-			stringifyJSON = true
-		case reflect.Map:
-			// fmt.Println(k, "is a map with element type", rt.Elem())
-			stringifyJSON = true
-		default:
+		if element != nil {
+			rt := reflect.TypeOf(element)
+			switch rt.Kind() {
+			case reflect.Slice:
+				// fmt.Println(k, "is a slice with element type", rt.Elem())
+				stringifyJSON = true
+			case reflect.Array:
+				// fmt.Println(k, "is an array with element type", rt.Elem())
+				stringifyJSON = true
+			case reflect.Map:
+				// fmt.Println(k, "is a map with element type", rt.Elem())
+				stringifyJSON = true
+			default:
 
+			}
 		}
 	}
 
