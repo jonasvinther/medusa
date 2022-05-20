@@ -47,7 +47,7 @@ func (client *Client) MountpathSplitPrefix(path string) (string, string, error) 
 	if err != nil {
 		// any 404 indicates k/v v1
 		if resp != nil && resp.StatusCode == 404 {
-			return "", "path", nil
+			return "", path, nil
 		}
 		return "", "", err
 	}
