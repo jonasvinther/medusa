@@ -29,6 +29,9 @@ jobs:
             dep ensure
         fi
 
+    - name: Print out some variables
+      run: echo ${{ github }}
+
     - name: Start Vault container
       run: docker-compose -f scripts/docker-compose.yml up -d 
       env:
