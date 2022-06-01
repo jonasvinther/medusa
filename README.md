@@ -1,4 +1,6 @@
-![medusa logo](https://raw.githubusercontent.com/jonasvinther/medusa/main/assets/logo/medusa-icon-240.png)
+![medusa logo](https://raw.githubusercontent.com/jonasvinther/medusa/main/assets/logo/medusa-icon-240.png#gh-light-mode-only)
+![medusa logo](https://raw.githubusercontent.com/jonasvinther/medusa/main/assets/logo/medusa-icon-240-white.png#gh-dark-mode-only)
+
 
 # Medusa
 
