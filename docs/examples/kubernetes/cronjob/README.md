@@ -66,7 +66,7 @@ spec:
             runAsUser: 1000
           containers:
           - name: medusa
-            image: jonasvinther/medusa:latest
+            image: ghcr.io/jonasvinther/medusa:latest
             imagePullPolicy: IfNotPresent
             command: ["./medusa", "export", "$(VAULT_PATH)", "-o", "/backup/backup.vault"]
             env:
