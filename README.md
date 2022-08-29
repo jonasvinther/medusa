@@ -71,7 +71,11 @@ Use them like this:
 
 ### Importing secrets
 > Get help with `./medusa import -h`
-Medusa import will take a [vault path] with [flags]
+
+Import a yaml file into a Vault instance
+
+Usage:
+  medusa import [vault path] ['file' to import | '-' read from stdin] [flags]
 
 ```
   Flags:
@@ -88,21 +92,30 @@ Medusa import will take a [vault path] with [flags]
 ```
 
 Example:
-```
+```bash
+# Read from file
 ./medusa import secret ./test/data/import-example-1.yaml -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
-2020/12/11 13:23:59 Secret successfully written to Vault instance on path [/A/B/E]
-2020/12/11 13:23:59 Secret successfully written to Vault instance on path [/A/Xa/Z]
-2020/12/11 13:23:59 Secret successfully written to Vault instance on path [/A/F/G]
-2020/12/11 13:23:59 Secret successfully written to Vault instance on path [/A/B/C/D]
-2020/12/11 13:23:59 Secret successfully written to Vault instance on path [/A/B/C/D/Db]
+Secret successfully written to Vault instance on path [/A/B/E]
+Secret successfully written to Vault instance on path [/A/Xa/Z]
+Secret successfully written to Vault instance on path [/A/F/G]
+Secret successfully written to Vault instance on path [/A/B/C/D]
+Secret successfully written to Vault instance on path [/A/B/C/D/Db]
 
-
+# Read from file
 ./medusa import secret/folder ./test/data/import-example-1.yaml -a="https://0.0.0.0:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
-2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/F/G]
-2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/B/C/D]
-2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/B/C/D/Db]
-2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/B/E]
-2020/12/11 13:25:03 Secret successfully written to Vault instance on path [folder/A/Xa/Z]
+Secret successfully written to Vault instance on path [folder/A/F/G]
+Secret successfully written to Vault instance on path [folder/A/B/C/D]
+Secret successfully written to Vault instance on path [folder/A/B/C/D/Db]
+Secret successfully written to Vault instance on path [folder/A/B/E]
+Secret successfully written to Vault instance on path [folder/A/Xa/Z]
+
+# Read from stdin
+cat ./test/data/import-example-1.yaml | ./medusa import secret -
+Secret successfully written to Vault [https://localhost:8201] using path [/A/F/G]
+Secret successfully written to Vault [https://localhost:8201] using path [/A/B/C/D]
+Secret successfully written to Vault [https://localhost:8201] using path [/A/B/C/D/Db]
+Secret successfully written to Vault [https://localhost:8201] using path [/A/B/E]
+Secret successfully written to Vault [https://localhost:8201] using path [/A/Xa/Z]
 ```
 
 ### Exporting secrets
