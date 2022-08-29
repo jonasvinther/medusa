@@ -2,10 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
+	"strings"
+
 	"github.com/jonasvinther/medusa/pkg/encrypt"
 	"github.com/jonasvinther/medusa/pkg/importer"
 	"github.com/jonasvinther/medusa/pkg/vaultengine"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -18,7 +21,7 @@ func init() {
 }
 
 var importCmd = &cobra.Command{
-	Use:   "import [vault path] [file to import]",
+	Use:   "import [vault path] ['file' to import | '-' read from stdin]",
 	Short: "Import a yaml file into a Vault instance",
 	Long:  ``,
 	Args:  cobra.MinimumNArgs(2),
@@ -44,7 +47,6 @@ var importCmd = &cobra.Command{
 		client.SetEngineType(engineType)
 
 		var parsedYaml importer.ParsedYaml
-		// var err error
 
 		if doDecrypt {
 			// Decrypt the data before parsing
@@ -61,11 +63,19 @@ var importCmd = &cobra.Command{
 				return err
 			}
 		} else {
-			// Read unencrypted data from file
-			data, err := importer.ReadFromFile(file)
-			if err != nil {
-				fmt.Println(err)
-				return err
+			var data []byte
+
+			if file == "-" {
+				// Read unencrypted data from stdin
+				var inputReader io.Reader = cmd.InOrStdin()
+				data, _ = ioutil.ReadAll(inputReader)
+			} else {
+				// Read unencrypted data from file
+				data, err = importer.ReadFromFile(file)
+				if err != nil {
+					fmt.Println(err)
+					return err
+				}
 			}
 
 			// Import and parse the data
