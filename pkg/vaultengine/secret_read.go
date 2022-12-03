@@ -17,7 +17,6 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 	finalPath := client.engine + infix + path
 
 	secret, err := client.vc.Logical().Read(finalPath)
-	// fmt.Printf("%+v", secret)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -38,10 +37,10 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 		// of the secret has been deleted we return nil because there are
 		// no active version of the secret
 		metadata := secret.Data["metadata"].(map[string]interface{})
-		if metadata["deletion_time"] != "" {
+		if metadata["destroyed"] == true {
 			return nil
 		} else {
-			log.Fatalf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
+			log.Printf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
 		}
 	}
 

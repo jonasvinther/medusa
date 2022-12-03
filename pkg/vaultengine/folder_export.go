@@ -49,7 +49,7 @@ func buildFolderStructure(parentFolder *Folder, parts []string, subFolders Folde
 	return nil
 }
 
-//PathReader recursively reads the provided path and all subpaths
+// PathReader recursively reads the provided path and all subpaths
 func (client *Client) PathReader(parentFolder *Folder, path string) error {
 	folder, err := client.FolderRead(path)
 	if err != nil {
@@ -77,7 +77,9 @@ func (client *Client) PathReader(parentFolder *Folder, path string) error {
 			(*parentFolder)[keyName] = subFolder
 		} else {
 			s := client.SecretRead(newPath)
-			(*parentFolder)[strKey] = s
+			if len(s) > 0 {
+				(*parentFolder)[strKey] = s
+			}
 		}
 	}
 
