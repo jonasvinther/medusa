@@ -19,6 +19,7 @@
   * [Importing secrets](#importing-secrets)
   * [Exporting secrets](#exporting-secrets)
   * [Deleting secrets](#deleting-secrets)
+  * [Decrypt secrets](#decrypt-secrets)
   * [Kubernetes examples](docs/examples/kubernetes/cronjob/)
   * [Docker examples](docs/examples/docker/)
 - [Secure secret management outside Vault](#secure-secret-management-outside-vault)
@@ -197,6 +198,32 @@ Deleting secret [secret/staging/users/cart/database/users/writeuser]
 Deleting secret [secret/staging/users/user/database]
 Deleting secret [secret/staging/users/user/database/users/readuser]
 The secrets has now been deleted
+```
+
+### Decrypt secrets
+> Get help with `./medusa decrypt -h`
+Medusa decrypt will take a [FILE path] with [flags]
+
+```
+  Flags:
+  -p, --private-key string   Location of the RSA private key
+```
+
+Example:
+```
+# Write to stdout
+./medusa decrypt encrypted-export.txt --private-key private-key.pem
+env:
+  dev:
+    nomad:
+      token: secret-token
+  production:
+    nomad:
+      token: secret-other-token
+
+
+# Write to file
+./medusa decrypt encrypted-export.txt --private-key private-key.pem > plaintext-export.yaml
 ```
 
 ## Secure secret management outside Vault
