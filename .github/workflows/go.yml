@@ -36,7 +36,7 @@ jobs:
         VAULT_VOLUME: /tmp/vault/data/vault-volume
 
     - name: Build
-      run: go build -v .
+      run: go build -v -ldflags="-X 'github.com/jonasvinther/medusa/cmd.Version=$GITHUB_REF_NAME'" .
 
     - name: Test
       run: go test -v ./...
@@ -59,6 +59,8 @@ jobs:
       run: ./medusa export secret/A -a="http://0.0.0.0:8201" -t="my-root-token" --insecure --encrypt true --public-key="./public-key.pem" --output encrypted-export.txt
     - name: Decrypt and import
       run: ./medusa import secret/decrypted encrypted-export.txt -a="http://0.0.0.0:8201" -t="my-root-token" --insecure --decrypt true --private-key private-key.pem
+    - name: Print version
+      run: ./medusa version
 
 
     - name: Get secret

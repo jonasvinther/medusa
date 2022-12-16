@@ -4,7 +4,7 @@ test:
 	go test -v ./...
 
 build:
-	go build
+	go build -ldflags="-X 'github.com/jonasvinther/medusa/cmd.Version=develop'"
 
 compile:
 	echo "Compiling for every OS and Platform"
