@@ -5,6 +5,9 @@ builds:
     env:
       - CGO_ENABLED=0
 
+    ldflags:
+     - -X 'github.com/jonasvinther/medusa/cmd.Version=$VERSION'
+
     # GOOS list to build for.
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Defaults are darwin and linux.
