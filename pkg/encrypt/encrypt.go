@@ -3,6 +3,7 @@ package encrypt
 import (
 	"bufio"
 	b64 "encoding/base64"
+	"log"
 	"os"
 )
 
@@ -13,7 +14,6 @@ func Encrypt(publicKeyPath string, output string, data []byte) (encryptedKey, en
 
 	// AEs key
 	key := NewAesEncryptionKey()
-	// fmt.Printf("AES key: %v \n", *key)
 	text := []byte(string(data))
 	encrypted, _ := AesEncrypt(text, key)
 
@@ -26,14 +26,24 @@ func Encrypt(publicKeyPath string, output string, data []byte) (encryptedKey, en
 }
 
 func Decrypt(privateKeyPath string, output string) (string, error) {
-	// Decrypt
 	file, err := os.Open(output)
-
 	if err != nil {
 		return "", err
 	}
+	fi, err := file.Stat()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	scanner := bufio.NewScanner(file)
+
+	// We don't know the length of the longesst line in the file yet.
+	// Let's just find the total size of the file and set that as
+	// the maximum size of the buffer.
+	var maxCapacity int = int(fi.Size())
+	buf := make([]byte, maxCapacity)
+	scanner.Buffer(buf, maxCapacity)
+
 	scanner.Split(bufio.ScanLines)
 	var txtlines []string
 
@@ -43,13 +53,25 @@ func Decrypt(privateKeyPath string, output string) (string, error) {
 
 	file.Close()
 
-	decryptData, _ := b64.StdEncoding.DecodeString(txtlines[0])
-	decryptKey, _ := b64.StdEncoding.DecodeString(txtlines[1])
+	decryptData, err := b64.StdEncoding.DecodeString(txtlines[0])
+	if err != nil {
+		return "", err
+	}
+	decryptKey, err := b64.StdEncoding.DecodeString(txtlines[1])
+	if err != nil {
+		return "", err
+	}
 
 	// Decrypt rsa
 	privateKey := ReadRsaPrivateKey(privateKeyPath)
-	decryptedKey, _ := RsaDecrypt(string(decryptKey), privateKey)
-	decrypted, _ := AesDecrypt(decryptData, decryptedKey)
+	decryptedKey, err := RsaDecrypt(string(decryptKey), privateKey)
+	if err != nil {
+		return "", err
+	}
+	decrypted, err := AesDecrypt(decryptData, decryptedKey)
+	if err != nil {
+		return "", err
+	}
 
 	return string(decrypted), nil
 }
