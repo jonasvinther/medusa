@@ -226,6 +226,26 @@ env:
 ./medusa decrypt encrypted-export.txt --private-key private-key.pem > plaintext-export.yaml
 ```
 
+### Encrypt secrets
+> Get help with `./medusa encrypt -h`
+Medusa encrypt will take a [FILE path] with [flags]
+
+```
+  Flags:
+  -o, --output string       Write to file instead of stdout
+  -p, --public-key string   Location of the RSA public key
+```
+
+Example:
+```
+# Write to stdout
+./medusa encrypt plaintext-export.txt --public-key public-key.pem
+&lt;Encrypted data&gt;
+
+# Write to file
+./medusa encrypt plaintext-export.txt --public-key public-key.pem --output encrypted-export.txt.b64
+```
+
 ## Secure secret management outside Vault
 Medusa will help you securely manage your secrets outside Vault.
 This could for instance be as a backup of your Vault data or while your secrets are being transported between Vault instances.  
