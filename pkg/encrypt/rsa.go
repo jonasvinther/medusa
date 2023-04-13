@@ -16,7 +16,7 @@ import (
 // https://www.scottbrady91.com/OpenSSL/Creating-RSA-Keys-using-OpenSSL
 
 // ReadRsaPrivateKey sets the private key
-func ReadRsaPrivateKey(key string) *rsa.PrivateKey {
+func ReadRsaPrivateKey(key string) interface{} {
 	keyData, err := ioutil.ReadFile(key)
 	if err != nil {
 		log.Printf("ERROR: fail get idrsa, %s", err.Error())
@@ -29,13 +29,41 @@ func ReadRsaPrivateKey(key string) *rsa.PrivateKey {
 		os.Exit(1)
 	}
 
-	privateKey, err := x509.ParsePKCS1PrivateKey(keyBlock.Bytes)
-	if err != nil {
-		log.Printf("ERROR: fail get idrsa, %s", err.Error())
-		os.Exit(1)
-	}
+	const (
+		// ECPrivateKeyBlockType is a possible value for pem.Block.Type.
+		ECPrivateKeyBlockType = "EC PRIVATE KEY"
+		// RSAPrivateKeyBlockType is a possible value for pem.Block.Type.
+		RSAPrivateKeyBlockType = "RSA PRIVATE KEY"
+		// PrivateKeyBlockType is a possible value for pem.Block.Type.
+		PrivateKeyBlockType = "PRIVATE KEY"
+	)
 
-	return privateKey
+	switch keyBlock.Type {
+	case ECPrivateKeyBlockType:
+		// ECDSA Private Key in ASN.1 format
+		key, err := x509.ParseECPrivateKey(keyBlock.Bytes)
+		if err != nil {
+			log.Printf("ERROR: %s", err.Error())
+			os.Exit(1)
+		}
+		return key
+	case RSAPrivateKeyBlockType:
+		// RSA Private Key in PKCS#1 format
+		key, err := x509.ParsePKCS1PrivateKey(keyBlock.Bytes)
+		if err != nil {
+			log.Printf("ERROR: %s", err.Error())
+			os.Exit(1)
+		}
+		return key
+	case PrivateKeyBlockType:
+		// RSA or ECDSA Private Key in unencrypted PKCS#8 format
+		key, err := x509.ParsePKCS8PrivateKey(keyBlock.Bytes)
+		if err != nil {
+			log.Printf("ERROR: %s", err.Error())
+			os.Exit(1)
+		}
+		return key
+	}
 }
 
 // ReadRsaPublicKey sets the public key
