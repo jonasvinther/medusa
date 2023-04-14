@@ -29,13 +29,20 @@ func ReadRsaPrivateKey(key string) *rsa.PrivateKey {
 		os.Exit(1)
 	}
 
-	privateKey, err := x509.ParsePKCS1PrivateKey(keyBlock.Bytes)
+	privateKey, err := x509.ParsePKCS8PrivateKey(keyBlock.Bytes)
 	if err != nil {
 		log.Printf("ERROR: fail get idrsa, %s", err.Error())
 		os.Exit(1)
 	}
 
-	return privateKey
+	rsaPrivateKey, ok := privateKey.(*rsa.PrivateKey)
+	if !ok {
+		log.Printf("ERROR: fail get idrsa, invalid key format")
+		os.Exit(1)
+	}
+	
+	return rsaPrivateKey
+
 }
 
 // ReadRsaPublicKey sets the public key
