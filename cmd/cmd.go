@@ -32,6 +32,24 @@ Created by Jonas Vinther & Henrik Høegh.`,
 			}
 		}
 
+		role, _ := cmd.Flags().GetString("role")
+		if viper.IsSet("VAULT_ROLE") && role == "" {
+			value := viper.Get("VAULT_ROLE").(string)
+			err := cmd.Flags().Set("role", value)
+			if err != nil {
+				return err
+			}
+		}
+
+		kubernetes, _ := cmd.Flags().GetBool("kubernetes")
+		if viper.IsSet("KUBERNETES") && kubernetes == false {
+			value := viper.GetBool("KUBERNETES")
+			err := cmd.Flags().Set("kubernetes", strconv.FormatBool(value))
+			if err != nil {
+				return err
+			}
+		}
+
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		if viper.IsSet("VAULT_SKIP_VERIFY") && insecure == false {
 			value := viper.GetBool("VAULT_SKIP_VERIFY")
@@ -62,6 +80,8 @@ func Execute() error {
 func init() {
 	rootCmd.PersistentFlags().StringP("address", "a", "", "Address of the Vault server")
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Vault authentication token")
+	rootCmd.PersistentFlags().StringP("role", "r", "", "Vault role for Kubernetes JWT authentication")
+	rootCmd.PersistentFlags().BoolP("kubernetes", "", false, "Authenticate using the Kubernetes JWT token")
 	rootCmd.PersistentFlags().BoolP("insecure", "k", false, "Allow insecure server connections when using SSL")
 	rootCmd.PersistentFlags().StringP("namespace", "n", "", "Namespace within the Vault server (Enterprise only)")
 

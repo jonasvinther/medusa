@@ -131,6 +131,13 @@ medusa-1615982100-5tfl8   0/1     Completed   0          60s
 medusa-1615982160-4b527   0/1     Completed   0          9s
 ```
 
+### Using Kubernetes authentication
+If you are using the kubernetes authentication method in Vault, it is also possible to use the kubernetes provided JWT token inside a Pod and auth role in order to authenticate.
+
+```yaml
+command: ["./medusa", "export", "$(VAULT_PATH)", "--kubernetes", "--role=default", "-o", "/backup/backup.vault"]
+```
+
 ### Further customization
 This only serves as an example as to how you could use `Medusa` to take a backup of Vault from a given location. 
 

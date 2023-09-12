@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+
 	"github.com/jonasvinther/medusa/pkg/encrypt"
 	"github.com/jonasvinther/medusa/pkg/vaultengine"
 
@@ -27,6 +28,8 @@ var exportCmd = &cobra.Command{
 		path := args[0]
 		vaultAddr, _ := cmd.Flags().GetString("address")
 		vaultToken, _ := cmd.Flags().GetString("token")
+		vaultRole, _ := cmd.Flags().GetString("role")
+		kubernetes, _ := cmd.Flags().GetBool("kubernetes")
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
@@ -34,7 +37,7 @@ var exportCmd = &cobra.Command{
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes)
 		engine, path, err := client.MountpathSplitPrefix(path)
 		if err != nil {
 			fmt.Println(err)
