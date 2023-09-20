@@ -1,10 +1,12 @@
 package vaultengine
 
 import (
+	"context"
 	"errors"
 	"strings"
 
 	vault "github.com/hashicorp/vault/api"
+	auth "github.com/hashicorp/vault/api/auth/kubernetes"
 )
 
 // Client describes the arguments that is needed to to establish a connecting to a Vault instance
@@ -14,17 +16,22 @@ type Client struct {
 	namespace  string
 	engine     string
 	engineType string
+	role       string
+	kubernetes bool
 	insecure   bool
 	vc         *vault.Client
 }
 
 // NewClient creates a instance of the VaultClient struct
-func NewClient(addr, token string, insecure bool, namespace string) *Client {
+func NewClient(addr, token string, insecure bool, namespace string, role string, kubernetes bool) *Client {
 	client := &Client{
-		token:     token,
-		addr:      addr,
-		insecure:  insecure,
-		namespace: namespace}
+		token:      token,
+		addr:       addr,
+		insecure:   insecure,
+		namespace:  namespace,
+		role:       role,
+		kubernetes: kubernetes,
+	}
 
 	client.newVaultClient()
 
@@ -97,6 +104,20 @@ func (client *Client) newVaultClient() error {
 
 	if client.token != "" {
 		client.vc.SetToken(client.token)
+	}
+
+	// Authenticate using Kubernetes JWT if kubernetes flag is set
+	if client.kubernetes {
+		kubernetesAuth, err := auth.NewKubernetesAuth(client.role)
+		if err != nil {
+			return err
+		}
+
+		authInfo, err := vc.Auth().Login(context.Background(), kubernetesAuth)
+		if err != nil {
+			return err
+		}
+		client.vc.SetToken(authInfo.Auth.ClientToken)
 	}
 
 	return nil

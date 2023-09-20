@@ -302,15 +302,23 @@ Usage:
   medusa [command]
 
 Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  decrypt     Decrypt an encrypted Vault output file into plaintext in stdout
+  delete      Recursively delete all secrets below the given path
+  encrypt     Encrypt a Vault export file onto stdout or to an output file
   export      Export Vault secrets as yaml
   help        Help about any command
   import      Import a yaml file into a Vault instance
+  version     Print the version number of Medusa
 
 Flags:
-  -a, --address string   Address of the Vault server
-  -h, --help             help for medusa
-  -k, --insecure         Allow insecure server connections when using SSL
-  -t, --token string     Vault authentication token
+  -a, --address string     Address of the Vault server
+  -h, --help               help for medusa
+  -k, --insecure           Allow insecure server connections when using SSL
+      --kubernetes         Authenticate using the Kubernetes JWT token
+  -n, --namespace string   Namespace within the Vault server (Enterprise only)
+  -r, --role string        Vault role for Kubernetes JWT authentication
+  -t, --token string       Vault authentication token
 
-Use "medusa [command] --help" for more information about a command.
+Use "medusa [command] --help" for more information about a command
 ``` 
