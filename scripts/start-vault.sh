@@ -53,9 +53,9 @@ docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$V
 echo "
 To run vault commands, use the following docker command:
  - For connecting to Vault on the same Docker host:
-     docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$VAULT_IP:8201 -e VAULT_SKIP_VERIFY=true --rm vault:latest vault status 
+     docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$VAULT_IP:8201 -e VAULT_SKIP_VERIFY=true --rm hashicorp/vault:latest vault status 
  - For connecting to Vault from another host :
-     docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$HOST_IP:8201 -e VAULT_SKIP_VERIFY=true --rm vault:latest vault status 
+     docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$HOST_IP:8201 -e VAULT_SKIP_VERIFY=true --rm hashicorp/vault:latest vault status 
 "
 
 # Generate .env file
