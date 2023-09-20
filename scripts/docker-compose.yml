@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   vault:
-    image: vault:latest
+    image: hashicorp/vault:latest
     container_name: vault
     restart: on-failure:10
     ports:
