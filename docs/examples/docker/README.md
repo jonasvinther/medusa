@@ -8,6 +8,7 @@ First, define a function and export it. This could be done in your environment s
 function medusa(){
   docker run   \
     -v $(pwd):/tmp/output/  \
+    -w /tmp/output/ \
     --user $(id -u):$(id -u)  \
     -e VAULT_ADDR=$VAULT_ADDR \
     -e VAULT_TOKEN=$VAULT_TOKEN  \
@@ -26,6 +27,10 @@ VAULT_TOKEN=00000000-0000-0000-0000-000000000000
 ```
 
 And now you are ready to run medusa like this
+
+```
+medusa import medusa import secret ./test/data/import-example-1.yaml
+```
 
 ```
 medusa export secret/A
