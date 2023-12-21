@@ -1,0 +1,22 @@
+diff --git a/pkg/encrypt/rsa.go b/pkg/encrypt/rsa.go
+index 4d8a61f..793ea77 100644
+--- a/pkg/encrypt/rsa.go
++++ b/pkg/encrypt/rsa.go
+@@ -30,12 +30,16 @@ func ReadRsaPrivateKey(key string) *rsa.PrivateKey {
+        }
+ 
+        privateKey, err := x509.ParsePKCS1PrivateKey(keyBlock.Bytes)
++       if err == nil {
++               return privateKey
++       }
++       privateKeyPKCS8, err := x509.ParsePKCS8PrivateKey(keyBlock.Bytes)
+        if err != nil {
+                log.Printf("ERROR: fail get idrsa, %s", err.Error())
+                os.Exit(1)
+        }
+ 
+-       return privateKey
++       return privateKeyPKCS8.(*rsa.PrivateKey)
+ }
+ 
+ // ReadRsaPublicKey sets the public key
