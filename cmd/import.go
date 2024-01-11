@@ -33,12 +33,13 @@ var importCmd = &cobra.Command{
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		vaultRole, _ := cmd.Flags().GetString("role")
 		kubernetes, _ := cmd.Flags().GetBool("kubernetes")
+		authPath, _ := cmd.Flags().GetString("kubernetes-auth-path")
 		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
 		doDecrypt, _ := cmd.Flags().GetBool("decrypt")
 		privateKey, _ := cmd.Flags().GetString("private-key")
 
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
 		engine, prefix, err := client.MountpathSplitPrefix(path)
 		if err != nil {
 			fmt.Println(err)
