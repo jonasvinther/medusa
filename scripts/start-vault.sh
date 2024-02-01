@@ -47,7 +47,7 @@ VAULT_IP=$(docker inspect vault --format='{{range .NetworkSettings.Networks}}{{.
 echo "Vault container ip is : $VAULT_IP"
 
 # Run a `Vault status` to check if it is alive
-docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$VAULT_IP:8201 -e VAULT_SKIP_VERIFY=true --rm vault:latest vault status
+docker run --network=container:vault --cap-add IPC_LOCK -e VAULT_ADDR=https://$VAULT_IP:8201 -e VAULT_SKIP_VERIFY=true --rm hashicorp/vault:latest vault status
 
 # Echo help on how to interact with Vault from the same host
 echo "
@@ -59,10 +59,19 @@ To run vault commands, use the following docker command:
 "
 
 # Generate .env file
+echo "Generating .env file"
+echo -e "VAULT_ADDR=$VAULT_ADDR\nVAULT_SKIP_VERIFY=true\nVAULT_TOKEN=$VAULT_TOKEN" > .env
+
 # Cleanup the temp folder
 if [ ! -d "~/.medusa" ]; then
   mkdir -p ~/.medusa
 fi
+
+if [ -f "$HOME/.medusa/config.yaml" ]; then
+  echo "Backing up existing Medusa config file"
+  cp ~/.medusa/config.yaml{,_backup}
+fi
+
 echo "Generating Medusa config file"
 
 echo "VAULT_ADDR: $VAULT_ADDR
