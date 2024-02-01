@@ -18,12 +18,13 @@ type Client struct {
 	engineType string
 	role       string
 	kubernetes bool
+	authPath   string
 	insecure   bool
 	vc         *vault.Client
 }
 
 // NewClient creates a instance of the VaultClient struct
-func NewClient(addr, token string, insecure bool, namespace string, role string, kubernetes bool) *Client {
+func NewClient(addr, token string, insecure bool, namespace string, role string, kubernetes bool, authPath string) *Client {
 	client := &Client{
 		token:      token,
 		addr:       addr,
@@ -31,6 +32,7 @@ func NewClient(addr, token string, insecure bool, namespace string, role string,
 		namespace:  namespace,
 		role:       role,
 		kubernetes: kubernetes,
+		authPath:   authPath,
 	}
 
 	client.newVaultClient()
@@ -107,13 +109,22 @@ func (client *Client) newVaultClient() error {
 	}
 
 	// Authenticate using Kubernetes JWT if kubernetes flag is set
+	var authPath string
+
 	if client.kubernetes {
-		kubernetesAuth, err := auth.NewKubernetesAuth(client.role)
+		if client.authPath != "" {
+			authPath = client.authPath
+		} else {
+			authPath = "kubernetes"
+		}
+
+		kubernetesAuth, err := auth.NewKubernetesAuth(client.role, auth.WithMountPath(authPath))
 		if err != nil {
 			return err
 		}
 
 		authInfo, err := vc.Auth().Login(context.Background(), kubernetesAuth)
+
 		if err != nil {
 			return err
 		}

@@ -27,12 +27,13 @@ var deleteCmd = &cobra.Command{
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		vaultRole, _ := cmd.Flags().GetString("role")
 		kubernetes, _ := cmd.Flags().GetBool("kubernetes")
+		authPath, _ := cmd.Flags().GetString("kubernetes-auth-path")
 		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
 		isApproved, _ := cmd.Flags().GetBool("auto-approve")
 
 		// Setup Vault client
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
 		engine, path, err := client.MountpathSplitPrefix(path)
 		if err != nil {
 			fmt.Println(err)

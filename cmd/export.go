@@ -30,6 +30,7 @@ var exportCmd = &cobra.Command{
 		vaultToken, _ := cmd.Flags().GetString("token")
 		vaultRole, _ := cmd.Flags().GetString("role")
 		kubernetes, _ := cmd.Flags().GetBool("kubernetes")
+		authPath, _ := cmd.Flags().GetString("kubernetes-auth-path")
 		insecure, _ := cmd.Flags().GetBool("insecure")
 		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
@@ -37,7 +38,7 @@ var exportCmd = &cobra.Command{
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 
-		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes)
+		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
 		engine, path, err := client.MountpathSplitPrefix(path)
 		if err != nil {
 			fmt.Println(err)

@@ -133,6 +133,8 @@ medusa-1615982160-4b527   0/1     Completed   0          9s
 
 ### Using Kubernetes authentication
 If you are using the kubernetes authentication method in Vault, it is also possible to use the kubernetes provided JWT token inside a Pod and auth role in order to authenticate.
+If your authentication mount point is different from the default of `kubernetes`, for example if your vault instance is supporting multiple clusters, this can be changed with the
+`--kubernetes-auth-path` option.
 
 ```yaml
 command: ["./medusa", "export", "$(VAULT_PATH)", "--kubernetes", "--role=default", "-o", "/backup/backup.vault"]

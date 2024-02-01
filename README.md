@@ -312,13 +312,14 @@ Available Commands:
   version     Print the version number of Medusa
 
 Flags:
-  -a, --address string     Address of the Vault server
-  -h, --help               help for medusa
-  -k, --insecure           Allow insecure server connections when using SSL
-      --kubernetes         Authenticate using the Kubernetes JWT token
-  -n, --namespace string   Namespace within the Vault server (Enterprise only)
-  -r, --role string        Vault role for Kubernetes JWT authentication
-  -t, --token string       Vault authentication token
+  -a, --address string                Address of the Vault server
+  -h, --help                          help for medusa
+  -k, --insecure                      Allow insecure server connections when using SSL
+      --kubernetes                    Authenticate using the Kubernetes JWT token
+      --kubernetes-auth-path string   Authentication mount point within Vault for Kubernetes
+  -n, --namespace string              Namespace within the Vault server (Enterprise only)
+  -r, --role string                   Vault role for Kubernetes JWT authentication
+  -t, --token string                  Vault authentication token
 
-Use "medusa [command] --help" for more information about a command
+Use "medusa [command] --help" for more information about a command.
 ``` 
