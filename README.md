@@ -125,6 +125,7 @@ Medusa import will take a [vault path] with [flags]
 
 ```
   Flags:
+      --display-keys-only    Display only keys of secrets but not their values
   -e, --encrypt              Encrypt the exported Vault data
   -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
   -f, --format string        Specify the export format [yaml|json] (default "yaml")
