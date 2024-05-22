@@ -1,4 +1,5 @@
 FROM golang:alpine AS builder
+ARG VERSION
 
 RUN apk update && apk add --no-cache git
 
@@ -10,7 +11,9 @@ ADD . .
 
 RUN go mod download
 RUN go get -d -v
-RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/medusa
+RUN CGO_ENABLED=0 GOOS=linux go build \
+    -ldflags="-X 'github.com/jonasvinther/medusa/cmd.Version=${VERSION}'" \
+    -o /go/bin/medusa
 
 RUN adduser -S scratchuser
 RUN chown scratchuser /go/bin/medusa
