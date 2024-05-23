@@ -1,5 +1,6 @@
-FROM golang:alpine AS builder
+FROM --platform=$BUILDPLATFORM golang:alpine AS builder
 ARG VERSION
+ARG TARGETARCH
 
 RUN apk update && apk add --no-cache git
 
@@ -11,7 +12,7 @@ ADD . .
 
 RUN go mod download
 RUN go get -d -v
-RUN CGO_ENABLED=0 GOOS=linux go build \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build \
     -ldflags="-X 'github.com/jonasvinther/medusa/cmd.Version=${VERSION}'" \
     -o /go/bin/medusa
 
