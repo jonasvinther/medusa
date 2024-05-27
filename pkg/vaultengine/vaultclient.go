@@ -35,7 +35,9 @@ func NewClient(addr, token string, insecure bool, namespace string, role string,
 		authPath:   authPath,
 	}
 
-	client.newVaultClient()
+  if err := client.newVaultClient(); err != nil {
+    panic(err)
+  }
 
 	return client
 }
