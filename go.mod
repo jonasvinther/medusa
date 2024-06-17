@@ -8,7 +8,7 @@ require (
 	github.com/hashicorp/vault/api v1.13.0
 	github.com/hashicorp/vault/api/auth/kubernetes v0.6.0
 	github.com/manifoldco/promptui v0.9.0
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	gopkg.in/yaml.v2 v2.4.0
 )
