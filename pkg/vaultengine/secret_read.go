@@ -37,7 +37,8 @@ func (client *Client) SecretRead(path string) map[string]interface{} {
 		// of the secret has been deleted we return nil because there are
 		// no active version of the secret
 		metadata := secret.Data["metadata"].(map[string]interface{})
-		if metadata["destroyed"] == true {
+		if metadata["destroyed"] == true ||
+		   metadata["deleted"] != "" {
 			return nil
 		} else {
 			log.Printf("Error while reading secret\nPath:\t%s\nData:\t%#v\n\n", finalPath, secret.Data["data"])
