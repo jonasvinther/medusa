@@ -17,6 +17,7 @@ func init() {
 	exportCmd.PersistentFlags().BoolP("encrypt", "e", false, "Encrypt the exported Vault data")
 	exportCmd.PersistentFlags().StringP("public-key", "p", "", "Location of the RSA public key")
 	exportCmd.PersistentFlags().StringP("engine-type", "m", "kv2", "Specify the secret engine type [kv1|kv2]")
+	exportCmd.PersistentFlags().BoolP("display-keys-only", "", false, "Display only keys of secrets but not their values")
 }
 
 var exportCmd = &cobra.Command{
@@ -37,6 +38,7 @@ var exportCmd = &cobra.Command{
 		doEncrypt, _ := cmd.Flags().GetBool("encrypt")
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
+		keysOnly, _ := cmd.Flags().GetBool("display-keys-only")
 
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
 		engine, path, err := client.MountpathSplitPrefix(path)
@@ -52,6 +54,13 @@ var exportCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 			return err
+		}
+
+		if keysOnly {
+			err = removeValues(exportData)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Convert export to json or yaml
@@ -112,4 +121,20 @@ var exportCmd = &cobra.Command{
 
 		return nil
 	},
+}
+
+func removeValues(exportData vaultengine.Folder) error {
+	for k, v := range exportData {
+		switch r := v.(type) {
+		case vaultengine.Folder:
+			removeValues(r)
+		case map[string]interface{}:
+			removeValues(r)
+		case string:
+			exportData[k] = "********"
+		default:
+			return errors.New(fmt.Sprintf("Unknown type %T", r))
+		}
+	}
+	return nil
 }
