@@ -30,7 +30,7 @@ jobs:
         fi
 
     - name: Start Vault container
-      run: docker-compose -f scripts/docker-compose.yml up -d 
+      run: docker compose -f scripts/docker-compose.yml up -d 
       env:
         VAULT_TOKEN: my-root-token
         VAULT_VOLUME: /tmp/vault/data/vault-volume

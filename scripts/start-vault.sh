@@ -37,7 +37,7 @@ docker run -d -u root -v $VAULT_VOLUME:/tmp/vault:rw alpine:latest chown -R 100:
 
 # Start the Vault container
 (cd $SCRIPT_SOURCE
-docker-compose -f docker-compose-tls.yml up -d)
+docker compose -f docker-compose-tls.yml up -d)
 
 # Wait for Vault to startup
 sleep 5
