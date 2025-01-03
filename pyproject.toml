@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "medusa"
+version = "0.1.0"
+description = ""
+authors = ["badreddine <badreddine.aji@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.95"
+uvicorn = "^0.18"
+python-multipart = "^0.0.20"
+
+[tool.poetry.dev-dependencies]
+

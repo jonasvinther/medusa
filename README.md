@@ -17,8 +17,11 @@
 - [How to use](#how-to-use)
   * [Setting up Medusa](#setting-up-medusa)
   * [Importing secrets](#importing-secrets)
+  * [Improved import secrets](#improved-import-secrets)
   * [Exporting secrets](#exporting-secrets)
   * [Deleting secrets](#deleting-secrets)
+  * [Copying secrets](#copying-secrets)
+  * [Moving secrets](#moving-secrets)
   * [Decrypt secrets](#decrypt-secrets)
   * [Kubernetes examples](docs/examples/kubernetes/cronjob/)
   * [Docker examples](docs/examples/docker/)
@@ -324,3 +327,131 @@ Flags:
 
 Use "medusa [command] --help" for more information about a command.
 ``` 
+### Copying secrets
+> Get help with `./medusa copy -h`
+
+The "copy" command allows users to export secrets from a source path in Vault and copy them to a target path.
+```
+Usage:
+  medusa copy [flags]
+
+Flags:
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -h, --help                 help for copy
+
+Global Flags:
+  -a, --address string                Address of the Vault server
+  -k, --insecure                      Allow insecure server connections when using SSL
+      --kubernetes                    Authenticate using the Kubernetes JWT token
+      --kubernetes-auth-path string   Authentication mount point within Vault for Kubernetes
+  -n, --namespace string              Namespace within the Vault server (Enterprise only)
+  -r, --role string                   Vault role for Kubernetes JWT authentication
+  -t, --token string                  Vault authentication token
+```
+
+Example:
+```bash
+# Read from file
+./medusa copy secret/A/B A/C/B -a="http://vault:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
+Extracted data has been saved to '/tmp/exported_secret.yaml'.
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/C/D]
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/C/D/Db]
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/E]
+Secrets from A/B have been successfully copied to A/C/B
+```
+The secrets on path secret/A/B are copied to secret/A/C/B
+
+### Moving secrets
+> Get help with `./medusa move -h`
+
+Move Vault secret from one path to another
+```
+Usage:
+  medusa move [flags]
+
+Flags:
+  -y, --auto-approve         Skip interactive approval of plan before deletion
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -h, --help                 help for move
+
+Global Flags:
+  -a, --address string                Address of the Vault server
+  -k, --insecure                      Allow insecure server connections when using SSL
+      --kubernetes                    Authenticate using the Kubernetes JWT token
+      --kubernetes-auth-path string   Authentication mount point within Vault for Kubernetes
+  -n, --namespace string              Namespace within the Vault server (Enterprise only)
+  -r, --role string                   Vault role for Kubernetes JWT authentication
+  -t, --token string                  Vault authentication token
+```
+
+Example:
+```bash
+# Read from file
+./medusa move secret/A/B A/C/B -a="http://vault:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
+
+Extracted data has been saved to '/tmp/exported_secret.yaml'.
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/C/D/Db]
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/E]
+Secret successfully written to Vault [http://vault:8201] using path [A/C/B/C/D]
+Deleting secret [secret/A/B/C/D]
+Deleting secret [secret/A/B/C/D/Db]
+Deleting secret [secret/A/B/E]
+Do you want to delete the 3 secrets listed above? Only 'y' will be accepted to approve.: y
+The secrets has now been deleted
+```
+The secrets on path secret/A/B are moved to secret/A/C/B
+
+### Improved import secrets
+Now it is possible to import one or multiple files with a single command. It is also possible to import an entire folder containing secret files. Medusa will first ensure that the files in the folder comply with the Vault secret format, then proceed to import them to the path specified in the command.
+
+> Get help with `./medusa import -h`
+
+Import yaml/json files or folder of secrets into a Vault instance
+```bash
+Usage:
+  medusa import [vault path] ['file1' 'file2' ... or '-' to read from stdin] [flags]
+
+Flags:
+  -d, --decrypt              Decrypt the Vault data before importing
+  -m, --engine-type string   Specify the secret engine type [kv1|kv2] (default "kv2")
+  -h, --help                 help for import
+  -p, --private-key string   Location of the RSA private key
+
+Global Flags:
+  -a, --address string                Address of the Vault server
+  -k, --insecure                      Allow insecure server connections when using SSL
+      --kubernetes                    Authenticate using the Kubernetes JWT token
+      --kubernetes-auth-path string   Authentication mount point within Vault for Kubernetes
+  -n, --namespace string              Namespace within the Vault server (Enterprise only)
+  -r, --role string                   Vault role for Kubernetes JWT authentication
+  -t, --token string                  Vault authentication token
+```
+Example for multiple files:
+```bash
+# Read from file
+./medusa import secret test/data/example-dev-prod-env.yaml test/data/example-different-datatypes.yaml -a="http://vault:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
+
+Secret successfully written to Vault [http://vault:8201] using path [/production/env/platform/nats]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/cart/database/users/writeuser]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/user/database/users/readuser]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/user/database]
+Secret successfully written to Vault [http://vault:8201] using path [/production/env/platform/vault]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/root]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/user/database/users/readuser]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/cart/database/users/readuser]
+...
+```
+Example for secrets folder:
+```bash
+./medusa import secret test/data -a="http://vault:8201" -t="00000000-0000-0000-0000-000000000000" --insecure
+
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/root]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/ui/database/users/readuser]
+Secret successfully written to Vault [http://vault:8201] using path [/production/env/platform/vault]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/user/database]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/cart/database/users/writeuser]
+Secret successfully written to Vault [http://vault:8201] using path [/dev/users/root]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/cart/database/users/writeuser]
+Secret successfully written to Vault [http://vault:8201] using path [/production/users/user/database/users/readuser]
+...
+```
