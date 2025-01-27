@@ -8,9 +8,9 @@ import (
 )
 
 // CollectPaths will retrieve all paths to secrets defined under the given path
-func (client *Client) CollectPaths(path string) ([]string, error) {
+func (client *Client) CollectPaths(path string, sleepMillis int) ([]string, error) {
 	var secretPaths []string
-	folder, err := client.FolderRead(path)
+	folder, err := client.FolderRead(path, sleepMillis)
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +21,7 @@ func (client *Client) CollectPaths(path string) ([]string, error) {
 		newPath = CleanupPath(newPath)
 
 		if IsFolder(strKey) {
-			t, err := client.CollectPaths(newPath)
+			t, err := client.CollectPaths(newPath, sleepMillis)
 			secretPaths = append(secretPaths, t...)
 			if err != nil {
 				return nil, err

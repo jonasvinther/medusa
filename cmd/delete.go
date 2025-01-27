@@ -31,6 +31,7 @@ var deleteCmd = &cobra.Command{
 		namespace, _ := cmd.Flags().GetString("namespace")
 		engineType, _ := cmd.Flags().GetString("engine-type")
 		isApproved, _ := cmd.Flags().GetBool("auto-approve")
+		sleepMillis, _ := cmd.Flags().GetInt("sleep")
 
 		// Setup Vault client
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
@@ -44,7 +45,7 @@ var deleteCmd = &cobra.Command{
 		client.SetEngineType(engineType)
 
 		// Recursive delete
-		secretPaths, err := client.CollectPaths(path)
+		secretPaths, err := client.CollectPaths(path, sleepMillis)
 		if err != nil {
 			return err
 		}
