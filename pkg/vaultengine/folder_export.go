@@ -3,17 +3,18 @@ package vaultengine
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 // Folder defines a level of the Vault structure
 type Folder map[string]interface{}
 
 // FolderExport will export all subfolders and secrets from a specified location
-func (client *Client) FolderExport(path string) (Folder, error) {
+func (client *Client) FolderExport(path string, sleepMillis int) (Folder, error) {
 	baseFolder := make(Folder)
 	subFolders := make(Folder)
 
-	err := client.PathReader(&subFolders, path)
+	err := client.PathReader(&subFolders, path, sleepMillis)
 	if err != nil {
 		return nil, err
 	}
@@ -50,8 +51,9 @@ func buildFolderStructure(parentFolder *Folder, parts []string, subFolders Folde
 }
 
 // PathReader recursively reads the provided path and all subpaths
-func (client *Client) PathReader(parentFolder *Folder, path string) error {
-	folder, err := client.FolderRead(path)
+func (client *Client) PathReader(parentFolder *Folder, path string, sleepMillis int) error {
+
+	folder, err := client.FolderRead(path, sleepMillis)
 	if err != nil {
 		return err
 	}
@@ -64,9 +66,13 @@ func (client *Client) PathReader(parentFolder *Folder, path string) error {
 			subFolder := make(Folder)
 			keyName := strings.Replace(strKey, "/", "", -1)
 
-			err = client.PathReader(&subFolder, newPath)
+			err = client.PathReader(&subFolder, newPath, sleepMillis)
 			if err != nil {
 				return err
+			}
+
+			if sleepMillis > 0 {
+				time.Sleep(time.Duration(sleepMillis) * time.Millisecond)
 			}
 
 			if (*parentFolder)[keyName] != nil {
@@ -77,10 +83,16 @@ func (client *Client) PathReader(parentFolder *Folder, path string) error {
 			(*parentFolder)[keyName] = subFolder
 		} else {
 			s := client.SecretRead(newPath)
+
+			if sleepMillis > 0 {
+				time.Sleep(time.Duration(sleepMillis) * time.Millisecond)
+			}
+
 			if len(s) > 0 {
 				(*parentFolder)[strKey] = s
 			}
 		}
+
 	}
 
 	return nil

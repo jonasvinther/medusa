@@ -85,6 +85,7 @@ func init() {
 	rootCmd.PersistentFlags().StringP("kubernetes-auth-path", "", "", "Authentication mount point within Vault for Kubernetes")
 	rootCmd.PersistentFlags().BoolP("insecure", "k", false, "Allow insecure server connections when using SSL")
 	rootCmd.PersistentFlags().StringP("namespace", "n", "", "Namespace within the Vault server (Enterprise only)")
+	rootCmd.PersistentFlags().IntP("sleep", "s", 0, "Number of milliseconds to sleep after each operation to avoid rate limits")
 
 	// AutomaticEnv makes Viper load environment variables
 	viper.AutomaticEnv()

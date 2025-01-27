@@ -39,6 +39,7 @@ var exportCmd = &cobra.Command{
 		exportFormat, _ := cmd.Flags().GetString("format")
 		output, _ := cmd.Flags().GetString("output")
 		keysOnly, _ := cmd.Flags().GetBool("display-keys-only")
+		sleepMillis, _ := cmd.Flags().GetInt("sleep")
 
 		client := vaultengine.NewClient(vaultAddr, vaultToken, insecure, namespace, vaultRole, kubernetes, authPath)
 		engine, path, err := client.MountpathSplitPrefix(path)
@@ -50,7 +51,7 @@ var exportCmd = &cobra.Command{
 		client.UseEngine(engine)
 		client.SetEngineType(engineType)
 
-		exportData, err := client.FolderExport(path)
+		exportData, err := client.FolderExport(path, sleepMillis)
 		if err != nil {
 			fmt.Println(err)
 			return err

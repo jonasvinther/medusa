@@ -2,10 +2,11 @@ package vaultengine
 
 import (
 	"fmt"
+	"time"
 )
 
-//FolderRead reads the subpaths and secrets of the provided path
-func (client *Client) FolderRead(path string) ([]interface{}, error) {
+// FolderRead reads the subpaths and secrets of the provided path
+func (client *Client) FolderRead(path string, sleepMillis int) ([]interface{}, error) {
 	infix := "/metadata/"
 
 	if client.engineType == "kv1" {
@@ -17,6 +18,10 @@ func (client *Client) FolderRead(path string) ([]interface{}, error) {
 	secret, err := client.vc.Logical().List(finalPath)
 	if err != nil {
 		return nil, err
+	}
+
+	if sleepMillis > 0 {
+		time.Sleep(time.Duration(sleepMillis) * time.Millisecond)
 	}
 
 	if secret == nil {
